@@ -1,329 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #ffffff;
+    color: #111827;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
 
-    <title>World Clock</title>
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 45px;
+}
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #0f172a;
-            color: white;
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
+header h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+    letter-spacing: -1px;
+    color: #111827;
+}
 
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-        }
+header p {
+    color: #6b7280;
+    font-size: 16px;
+}
 
-        /* Header */
-        header {
-            text-align: center;
-            margin-bottom: 45px;
-        }
+/* Clock Grid */
+.clock-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
 
-        header h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
-            letter-spacing: -1px;
-        }
+/* Clock Card */
+.clock-card {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+    padding: 30px;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 
-        header p {
-            color: #94a3b8;
-            font-size: 16px;
-        }
+.clock-card:hover {
+    transform: translateY(-5px);
+    border-color: #cbd5e1;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
 
-        /* Clock Grid */
-        .clock-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-        }
+.city {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
 
-        /* Clock Card */
-        .clock-card {
-            background: #1e293b;
-            border: 1px solid #334155;
-            border-radius: 20px;
-            padding: 30px;
-            transition: 0.3s;
-        }
+.flag {
+    font-size: 30px;
+}
 
-        .clock-card:hover {
-            transform: translateY(-5px);
-            border-color: #64748b;
-        }
+.city-name {
+    font-size: 21px;
+    font-weight: bold;
+    color: #111827;
+}
 
-        .city {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
+.country {
+    color: #6b7280;
+    font-size: 13px;
+    margin-top: 3px;
+}
 
-        .flag {
-            font-size: 30px;
-        }
+.time {
+    font-size: 42px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: #111827;
+}
 
-        .city-name {
-            font-size: 21px;
-            font-weight: bold;
-        }
+.date {
+    color: #6b7280;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
 
-        .country {
-            color: #94a3b8;
-            font-size: 13px;
-            margin-top: 3px;
-        }
+.timezone {
+    display: inline-block;
+    background: #e5e7eb;
+    color: #4b5563;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+}
 
-        .time {
-            font-size: 42px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            margin-bottom: 10px;
-        }
+/* Seoul Highlight */
+.seoul {
+    border: 1px solid #94a3b8;
+}
 
-        .date {
-            color: #cbd5e1;
-            font-size: 15px;
-            margin-bottom: 20px;
-        }
+.seoul .timezone {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
 
-        .timezone {
-            display: inline-block;
-            background: #334155;
-            color: #cbd5e1;
-            padding: 6px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-        }
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 45px;
+    color: #9ca3af;
+    font-size: 13px;
+}
 
-        /* Seoul Highlight */
-        .seoul {
-            border: 1px solid #64748b;
-        }
-
-        .seoul .timezone {
-            background: #475569;
-            color: white;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            margin-top: 45px;
-            color: #64748b;
-            font-size: 13px;
-        }
-
-        /* Responsive */
-        @media (max-width: 800px) {
-            .clock-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            header h1 {
-                font-size: 34px;
-            }
-        }
-
-        @media (max-width: 500px) {
-            body {
-                padding: 25px 15px;
-            }
-
-            .clock-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .time {
-                font-size: 38px;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="container">
-
-    <header>
-        <h1>🌎 World Clock</h1>
-        <p>Current time around the world</p>
-    </header>
-
-    <main class="clock-grid">
-
-        <!-- Seoul -->
-        <div class="clock-card seoul">
-            <div class="city">
-                <div class="flag">🇰🇷</div>
-                <div>
-                    <div class="city-name">Seoul</div>
-                    <div class="country">South Korea</div>
-                </div>
-            </div>
-
-            <div class="time" id="seoul-time">--:--:--</div>
-            <div class="date" id="seoul-date">Loading...</div>
-            <div class="timezone" id="seoul-zone">KST</div>
-        </div>
-
-
-        <!-- Los Angeles -->
-        <div class="clock-card">
-            <div class="city">
-                <div class="flag">🇺🇸</div>
-                <div>
-                    <div class="city-name">Los Angeles</div>
-                    <div class="country">United States</div>
-                </div>
-            </div>
-
-            <div class="time" id="la-time">--:--:--</div>
-            <div class="date" id="la-date">Loading...</div>
-            <div class="timezone" id="la-zone">PST / PDT</div>
-        </div>
-
-
-        <!-- New York -->
-        <div class="clock-card">
-            <div class="city">
-                <div class="flag">🇺🇸</div>
-                <div>
-                    <div class="city-name">New York</div>
-                    <div class="country">United States</div>
-                </div>
-            </div>
-
-            <div class="time" id="ny-time">--:--:--</div>
-            <div class="date" id="ny-date">Loading...</div>
-            <div class="timezone" id="ny-zone">EST / EDT</div>
-        </div>
-
-
-        <!-- London -->
-        <div class="clock-card">
-            <div class="city">
-                <div class="flag">🇬🇧</div>
-                <div>
-                    <div class="city-name">London</div>
-                    <div class="country">United Kingdom</div>
-                </div>
-            </div>
-
-            <div class="time" id="london-time">--:--:--</div>
-            <div class="date" id="london-date">Loading...</div>
-            <div class="timezone" id="london-zone">GMT / BST</div>
-        </div>
-
-
-        <!-- Rome -->
-        <div class="clock-card">
-            <div class="city">
-                <div class="flag">🇮🇹</div>
-                <div>
-                    <div class="city-name">Rome</div>
-                    <div class="country">Italy</div>
-                </div>
-            </div>
-
-            <div class="time" id="rome-time">--:--:--</div>
-            <div class="date" id="rome-date">Loading...</div>
-            <div class="timezone" id="rome-zone">CET / CEST</div>
-        </div>
-
-    </main>
-
-    <footer>
-        Times update automatically every second
-    </footer>
-
-</div>
-
-
-<script>
-
-    const cities = [
-        {
-            id: "seoul",
-            timezone: "Asia/Seoul"
-        },
-        {
-            id: "la",
-            timezone: "America/Los_Angeles"
-        },
-        {
-            id: "ny",
-            timezone: "America/New_York"
-        },
-        {
-            id: "london",
-            timezone: "Europe/London"
-        },
-        {
-            id: "rome",
-            timezone: "Europe/Rome"
-        }
-    ];
-
-
-    function updateClocks() {
-
-        const now = new Date();
-
-        cities.forEach(city => {
-
-            // Time
-            const time = new Intl.DateTimeFormat("en-US", {
-                timeZone: city.timezone,
-                hour: "2-digit",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: false
-            }).format(now);
-
-
-            // Date
-            const date = new Intl.DateTimeFormat("en-US", {
-                timeZone: city.timezone,
-                weekday: "short",
-                year: "numeric",
-                month: "short",
-                day: "numeric"
-            }).format(now);
-
-
-            document.getElementById(
-                `${city.id}-time`
-            ).textContent = time;
-
-            document.getElementById(
-                `${city.id}-date`
-            ).textContent = date;
-
-        });
-
+/* Responsive */
+@media (max-width: 800px) {
+    .clock-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
+    header h1 {
+        font-size: 34px;
+    }
+}
 
-    // Update immediately
-    updateClocks();
+@media (max-width: 500px) {
+    body {
+        padding: 25px 15px;
+    }
 
-    // Update every second
-    setInterval(updateClocks, 1000);
+    .clock-grid {
+        grid-template-columns: 1fr;
+    }
 
-</script>
-
-</body>
-</html>
+    .time {
+        font-size: 38px;
+    }
+}
