@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beam Deflection Calculator - 3D</title>
 
-  <title>Beam Deflection Calculator - Version 2</title>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -31,11 +36,11 @@
     }
 
     .card {
-      background: #ffffff;
+      background: #fff;
       border-radius: 14px;
       padding: 26px;
       margin-bottom: 22px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
     }
 
     h1 {
@@ -56,7 +61,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2,minmax(0,1fr));
       gap: 18px;
     }
 
@@ -78,7 +83,7 @@
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 15px;
-      background: white;
+      background: #fff;
     }
 
     input:focus,
@@ -87,13 +92,19 @@
       border-color: #3b82f6;
     }
 
+    .small {
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
     .section-fields {
       margin-top: 18px;
       padding-top: 18px;
       border-top: 1px solid #e5e7eb;
     }
 
-    button {
+    .calc-button {
       width: 100%;
       margin-top: 24px;
       border: none;
@@ -103,11 +114,11 @@
       font-weight: 700;
       cursor: pointer;
       background: #111827;
-      color: white;
+      color: #fff;
     }
 
-    button:hover {
-      opacity: 0.92;
+    .calc-button:hover {
+      opacity: .92;
     }
 
     .error {
@@ -124,7 +135,7 @@
 
     .results {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3,minmax(0,1fr));
       gap: 14px;
     }
 
@@ -147,29 +158,71 @@
       word-break: break-word;
     }
 
-    .visual-wrap {
-      width: 100%;
-      overflow-x: auto;
+    .viewer-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: stretch;
+      margin-bottom: 12px;
     }
 
-    svg {
+    .viewer-stat {
+      border: 1px solid #e5e7eb;
+      border-radius: 9px;
+      padding: 10px 12px;
+      background: #fafafa;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .viewer-stat strong {
+      display: block;
+      font-size: 14px;
+      color: #111827;
+      margin-bottom: 2px;
+    }
+
+    .reset-button {
+      width: auto;
+      margin: 0;
+      padding: 0 16px;
+      border: 1px solid #d1d5db;
+      border-radius: 9px;
+      background: #fff;
+      color: #111827;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .reset-button:hover {
+      background: #f9fafb;
+    }
+
+    #viewer3d {
+      position: relative;
+      width: 100%;
+      height: 520px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: linear-gradient(#f8fafc,#eef2f7);
+    }
+
+    #viewer3d canvas {
       display: block;
       width: 100%;
-      min-width: 820px;
-      height: 430px;
-      background: #fbfbfc;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
+      height: 100%;
       touch-action: none;
     }
 
-    .drag-note {
+    .viewer-hint {
       margin-top: 12px;
       padding: 10px 12px;
       background: #eff6ff;
       color: #1e40af;
       border-radius: 8px;
       font-size: 13px;
+      line-height: 1.55;
     }
 
     .legend,
@@ -180,97 +233,73 @@
       line-height: 1.65;
     }
 
-    .small {
-      color: #6b7280;
-      font-size: 12px;
-      font-weight: 400;
-    }
-
-    @media (max-width: 760px) {
+    @media(max-width:760px) {
       .grid,
-      .results {
+      .results,
+      .viewer-head {
         grid-template-columns: 1fr;
       }
 
       .container {
         margin-top: 18px;
       }
+
+      .reset-button {
+        height: 42px;
+      }
+
+      #viewer3d {
+        height: 440px;
+      }
     }
   </style>
 </head>
 
-
 <body>
 
 <div class="container">
-
-
-  <!-- INPUT -->
 
   <div class="card">
 
     <h1>Beam Deflection Calculator</h1>
 
     <p class="subtitle">
-      Version 2 - Enhanced 2.5D visualization,
-      draggable point load,
-      detailed validation,
-      and maximum deflection position.
+      3D visualization, four cross sections, draggable 3D point load,
+      detailed validation, and verified maximum deflection position.
     </p>
 
     <h2>Input Data</h2>
 
-
     <div class="grid">
 
       <div class="field">
-
-        <label for="beamType">
-          Beam Type
-        </label>
+        <label for="beamType">Beam Type</label>
 
         <select id="beamType">
-
-          <option value="simply">
-            Simply Supported
-          </option>
-
-          <option value="cantilever">
-            Cantilever
-          </option>
-
+          <option value="simply">Simply Supported</option>
+          <option value="cantilever">Cantilever</option>
         </select>
-
       </div>
 
-
       <div class="field">
-
-        <label for="material">
-          Material
-        </label>
+        <label for="material">Material</label>
 
         <select id="material">
-
-          <option value="200000">
+          <option value="200000" data-name="Steel">
             Steel - E = 200 GPa
           </option>
 
-          <option value="69000">
+          <option value="69000" data-name="Aluminum">
             Aluminum - E = 69 GPa
           </option>
 
-          <option value="11000">
+          <option value="11000" data-name="Wood">
             Wood - E = 11 GPa
           </option>
-
         </select>
-
       </div>
 
-
       <div class="field">
-
         <label for="length">
           Beam Length, L (mm)
         </label>
@@ -280,13 +309,10 @@
           type="text"
           inputmode="decimal"
           value="3000"
-        >
-
+        />
       </div>
 
-
       <div class="field">
-
         <label for="load">
           Point Load, P (N)
         </label>
@@ -296,21 +322,15 @@
           type="text"
           inputmode="decimal"
           value="1000"
-        >
-
+        />
       </div>
 
-
       <div class="field">
-
         <label for="position">
-
           Load Position, a (mm)
-
           <span class="small">
             - from left support / fixed end
           </span>
-
         </label>
 
         <input
@@ -318,56 +338,35 @@
           type="text"
           inputmode="decimal"
           value="1500"
-        >
-
+        />
       </div>
 
-
       <div class="field">
-
         <label for="sectionType">
           Cross Section
         </label>
 
         <select id="sectionType">
-
-          <option value="rect">
-            Rectangular
-          </option>
-
-          <option value="circle">
-            Solid Circular
-          </option>
-
-          <option value="hollow">
-            Hollow Circular
-          </option>
-
-          <option value="ibeam">
-            I-Beam
-          </option>
-
+          <option value="rect">Rectangular</option>
+          <option value="circle">Solid Circular</option>
+          <option value="hollow">Hollow Circular</option>
+          <option value="ibeam">I-Beam</option>
         </select>
-
       </div>
 
     </div>
-
 
     <div
       id="sectionFields"
       class="section-fields">
     </div>
 
-
     <button
       type="button"
-      id="calculateBtn">
-
+      id="calculateBtn"
+      class="calc-button">
       CALCULATE
-
     </button>
-
 
     <div
       id="errorBox"
@@ -377,171 +376,116 @@
   </div>
 
 
-
-  <!-- VISUALIZATION -->
-
   <div class="card">
 
-    <h2>Beam Visualization</h2>
+    <h2>
+      3D Beam Visualization
+    </h2>
 
+    <div class="viewer-head">
 
-    <div class="visual-wrap">
+      <div class="viewer-stat">
+        <strong>Point Load</strong>
+        <span id="loadHud">
+          P = 1,000 N / a = 1,500 mm
+        </span>
+      </div>
 
-      <svg
-        id="beamSvg"
-        viewBox="0 0 1100 430">
-      </svg>
+      <div class="viewer-stat">
+        <strong>Maximum Deflection Position</strong>
+        <span id="maxHud">
+          x = 1,500 mm
+        </span>
+      </div>
+
+      <button
+        type="button"
+        id="resetViewBtn"
+        class="reset-button">
+        RESET VIEW
+      </button>
 
     </div>
 
+    <div id="viewer3d"></div>
 
-    <div class="drag-note">
-      Drag any part of the red point-load symbol.
-      The Load Position input and calculation results
-      will update automatically.
+    <div class="viewer-hint">
+      Drag the red 3D point-load arrow along the beam.
+      The Load Position input and all calculation results update
+      in real time. Drag empty space to rotate the 3D view and
+      use the mouse wheel to zoom.
     </div>
-
 
     <div class="legend">
-
-      2.5D gray object:
-      undeformed beam
-
+      Gray/Brown object: undeformed 3D beam
       &nbsp; | &nbsp;
-
-      Blue curve:
-      exaggerated deflected centerline
-
+      Blue tube: exaggerated deflected centerline
       &nbsp; | &nbsp;
-
-      Red load:
-      draggable point load
-
+      Red object: draggable 3D point load
       &nbsp; | &nbsp;
-
-      Black point:
-      maximum deflection position
-
+      Black sphere: maximum deflection position
     </div>
 
   </div>
 
 
-
-  <!-- RESULTS -->
-
   <div class="card">
 
-    <h2>Calculation Results</h2>
-
+    <h2>
+      Calculation Results
+    </h2>
 
     <div class="results">
 
       <div class="result-box">
-
         <div class="result-label">
           Maximum Moment
         </div>
-
-        <div
-          class="result-value"
-          id="momentResult">
-          -
-        </div>
-
+        <div class="result-value" id="momentResult">-</div>
       </div>
 
-
       <div class="result-box">
-
         <div class="result-label">
           Maximum Deflection
         </div>
-
-        <div
-          class="result-value"
-          id="deflectionResult">
-          -
-        </div>
-
+        <div class="result-value" id="deflectionResult">-</div>
       </div>
 
-
       <div class="result-box">
-
         <div class="result-label">
           Maximum Deflection Position
         </div>
-
-        <div
-          class="result-value"
-          id="positionResult">
-          -
-        </div>
-
+        <div class="result-value" id="positionResult">-</div>
       </div>
 
-
       <div class="result-box">
-
         <div class="result-label">
           Maximum Stress
         </div>
-
-        <div
-          class="result-value"
-          id="stressResult">
-          -
-        </div>
-
+        <div class="result-value" id="stressResult">-</div>
       </div>
 
-
       <div class="result-box">
-
         <div class="result-label">
           Maximum Strain
         </div>
-
-        <div
-          class="result-value"
-          id="strainResult">
-          -
-        </div>
-
+        <div class="result-value" id="strainResult">-</div>
       </div>
 
-
       <div class="result-box">
-
         <div class="result-label">
           Second Moment of Area, I
         </div>
-
-        <div
-          class="result-value"
-          id="inertiaResult">
-          -
-        </div>
-
+        <div class="result-value" id="inertiaResult">-</div>
       </div>
 
     </div>
 
-
     <p class="note">
-
       Internal units: N, mm, MPa.
-
       Linear elastic Euler-Bernoulli beam behavior is assumed.
-
-      Maximum deflection position is measured from the left support
-      for a simply supported beam and from the fixed end
-      for a cantilever beam.
-
-      The 2.5D geometry and deflection are schematic and are not drawn
-      to physical scale.
-
+      The 3D geometry and deformation are schematic
+      and are not drawn to physical scale.
     </p>
 
   </div>
@@ -549,54 +493,399 @@
 </div>
 
 
+<script type="module">
 
-<script>
+import * as THREE from 'three';
+
+import {
+  OrbitControls
+}
+from 'three/addons/controls/OrbitControls.js';
 
 
 /* =========================================================
-   BASIC VARIABLES
+   DOM
 ========================================================= */
 
+const beamTypeEl =
+  document.getElementById(
+    'beamType'
+  );
 
-const beamSvg =
-  document.getElementById("beamSvg");
+const materialEl =
+  document.getElementById(
+    'material'
+  );
 
+const lengthEl =
+  document.getElementById(
+    'length'
+  );
 
-const sectionType =
-  document.getElementById("sectionType");
+const loadEl =
+  document.getElementById(
+    'load'
+  );
 
+const positionEl =
+  document.getElementById(
+    'position'
+  );
+
+const sectionTypeEl =
+  document.getElementById(
+    'sectionType'
+  );
 
 const sectionFields =
-  document.getElementById("sectionFields");
+  document.getElementById(
+    'sectionFields'
+  );
+
+const errorBox =
+  document.getElementById(
+    'errorBox'
+  );
+
+const viewer =
+  document.getElementById(
+    'viewer3d'
+  );
+
+const loadHud =
+  document.getElementById(
+    'loadHud'
+  );
+
+const maxHud =
+  document.getElementById(
+    'maxHud'
+  );
+
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const BEAM_SCENE_LENGTH =
+  8.0;
+
+const HALF_BEAM =
+  BEAM_SCENE_LENGTH / 2;
+
+const STRUCTURE_Y_ROTATION =
+  THREE.MathUtils.degToRad(
+    -18
+  );
+
+const DEFLECTION_VISUAL_AMPLITUDE =
+  0.95;
+
+
+/* =========================================================
+   3D SCENE
+========================================================= */
+
+const scene =
+  new THREE.Scene();
+
+scene.background =
+  new THREE.Color(
+    0xf8fafc
+  );
+
+
+const camera =
+  new THREE.PerspectiveCamera(
+    42,
+    1,
+    0.1,
+    100
+  );
+
+
+const renderer =
+  new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: false
+  });
+
+
+renderer.setPixelRatio(
+  Math.min(
+    window.devicePixelRatio,
+    2
+  )
+);
+
+
+renderer.shadowMap.enabled =
+  true;
+
+
+renderer.shadowMap.type =
+  THREE.PCFSoftShadowMap;
+
+
+viewer.appendChild(
+  renderer.domElement
+);
+
+
+const controls =
+  new OrbitControls(
+    camera,
+    renderer.domElement
+  );
+
+
+controls.enableDamping =
+  true;
+
+
+controls.dampingFactor =
+  0.08;
+
+
+controls.enablePan =
+  false;
+
+
+controls.minDistance =
+  7;
+
+
+controls.maxDistance =
+  18;
+
+
+controls.minPolarAngle =
+  THREE.MathUtils.degToRad(
+    28
+  );
+
+
+controls.maxPolarAngle =
+  THREE.MathUtils.degToRad(
+    82
+  );
+
+
+function resetCamera() {
+
+  camera.position.set(
+    7.8,
+    5.2,
+    8.8
+  );
+
+
+  controls.target.set(
+    0,
+    -0.15,
+    0
+  );
+
+
+  controls.update();
+
+}
+
+
+resetCamera();
+
+
+document.getElementById(
+  'resetViewBtn'
+).addEventListener(
+  'click',
+  resetCamera
+);
+
+
+/* Lighting */
+
+scene.add(
+
+  new THREE.HemisphereLight(
+    0xffffff,
+    0x64748b,
+    1.55
+  )
+
+);
+
+
+const keyLight =
+  new THREE.DirectionalLight(
+    0xffffff,
+    2.0
+  );
+
+
+keyLight.position.set(
+  5,
+  9,
+  7
+);
+
+
+keyLight.castShadow =
+  true;
+
+
+keyLight.shadow.mapSize.set(
+  2048,
+  2048
+);
+
+
+scene.add(
+  keyLight
+);
+
+
+const fillLight =
+  new THREE.DirectionalLight(
+    0xbdd7ff,
+    0.8
+  );
+
+
+fillLight.position.set(
+  -7,
+  4,
+  -5
+);
+
+
+scene.add(
+  fillLight
+);
+
+
+/* Ground */
+
+const floor =
+  new THREE.Mesh(
+
+    new THREE.PlaneGeometry(
+      18,
+      14
+    ),
+
+    new THREE.MeshStandardMaterial({
+      color: 0xf1f5f9,
+      roughness: 1
+    })
+
+  );
+
+
+floor.rotation.x =
+  -Math.PI / 2;
+
+
+floor.position.y =
+  -1.55;
+
+
+floor.receiveShadow =
+  true;
+
+
+scene.add(
+  floor
+);
+
+
+const grid =
+  new THREE.GridHelper(
+    16,
+    16,
+    0xcbd5e1,
+    0xe2e8f0
+  );
+
+
+grid.position.y =
+  -1.545;
+
+
+scene.add(
+  grid
+);
+
+
+/* Structure group */
+
+const structureGroup =
+  new THREE.Group();
+
+
+structureGroup.rotation.y =
+  STRUCTURE_Y_ROTATION;
+
+
+scene.add(
+  structureGroup
+);
+
+
+const raycaster =
+  new THREE.Raycaster();
+
+
+const pointer =
+  new THREE.Vector2();
+
+
+const dragPlane =
+  new THREE.Plane(
+    new THREE.Vector3(
+      0,
+      1,
+      0
+    ),
+    0
+  );
+
+
+let loadHitbox =
+  null;
 
 
 let draggingLoad =
   false;
 
 
+let dragPointerId =
+  null;
+
+
+let lastValidState =
+  null;
+
 
 /* =========================================================
-   CROSS SECTION INPUTS
+   CROSS SECTION INPUT
 ========================================================= */
-
 
 function renderSectionFields() {
 
-
   const type =
-    sectionType.value;
+    sectionTypeEl.value;
 
 
-
-  if (type === "rect") {
-
+  if (
+    type === 'rect'
+  ) {
 
     sectionFields.innerHTML = `
 
       <div class="grid">
 
         <div class="field">
-
           <label for="width">
             Width, b (mm)
           </label>
@@ -605,14 +894,11 @@ function renderSectionFields() {
             id="width"
             type="text"
             inputmode="decimal"
-            value="50"
-          >
-
+            value="50">
         </div>
 
 
         <div class="field">
-
           <label for="height">
             Height, h (mm)
           </label>
@@ -621,9 +907,7 @@ function renderSectionFields() {
             id="height"
             type="text"
             inputmode="decimal"
-            value="100"
-          >
-
+            value="100">
         </div>
 
       </div>
@@ -633,9 +917,9 @@ function renderSectionFields() {
   }
 
 
-
-  else if (type === "circle") {
-
+  else if (
+    type === 'circle'
+  ) {
 
     sectionFields.innerHTML = `
 
@@ -651,8 +935,7 @@ function renderSectionFields() {
             id="diameter"
             type="text"
             inputmode="decimal"
-            value="80"
-          >
+            value="80">
 
         </div>
 
@@ -663,9 +946,9 @@ function renderSectionFields() {
   }
 
 
-
-  else if (type === "hollow") {
-
+  else if (
+    type === 'hollow'
+  ) {
 
     sectionFields.innerHTML = `
 
@@ -681,8 +964,7 @@ function renderSectionFields() {
             id="outerDiameter"
             type="text"
             inputmode="decimal"
-            value="100"
-          >
+            value="100">
 
         </div>
 
@@ -697,8 +979,7 @@ function renderSectionFields() {
             id="innerDiameter"
             type="text"
             inputmode="decimal"
-            value="70"
-          >
+            value="70">
 
         </div>
 
@@ -709,9 +990,7 @@ function renderSectionFields() {
   }
 
 
-
   else {
-
 
     sectionFields.innerHTML = `
 
@@ -727,8 +1006,7 @@ function renderSectionFields() {
             id="iHeight"
             type="text"
             inputmode="decimal"
-            value="120"
-          >
+            value="120">
 
         </div>
 
@@ -743,8 +1021,7 @@ function renderSectionFields() {
             id="flangeWidth"
             type="text"
             inputmode="decimal"
-            value="80"
-          >
+            value="80">
 
         </div>
 
@@ -759,8 +1036,7 @@ function renderSectionFields() {
             id="flangeThickness"
             type="text"
             inputmode="decimal"
-            value="10"
-          >
+            value="10">
 
         </div>
 
@@ -775,8 +1051,7 @@ function renderSectionFields() {
             id="webThickness"
             type="text"
             inputmode="decimal"
-            value="8"
-          >
+            value="8">
 
         </div>
 
@@ -789,11 +1064,9 @@ function renderSectionFields() {
 }
 
 
-
 /* =========================================================
-   NUMBER VALIDATION
+   VALIDATION
 ========================================================= */
-
 
 function getNumber(
   id,
@@ -801,50 +1074,54 @@ function getNumber(
   errors
 ) {
 
-
-  const element =
-    document.getElementById(id);
+  const el =
+    document.getElementById(
+      id
+    );
 
 
   const raw =
-    element
-      ? element.value.trim()
-      : "";
-
-
-  if (raw === "") {
-
-
-    errors.push(
-      label + " is required."
-    );
-
-
-    return NaN;
-
-  }
-
-
-
-  const value =
-    Number(raw);
-
+    el
+      ?
+      el.value.trim()
+      :
+      '';
 
 
   if (
-    !Number.isFinite(value)
+    raw === ''
   ) {
 
-
     errors.push(
-      label + " must be a valid number."
+      label +
+      ' is required.'
     );
-
 
     return NaN;
 
   }
 
+
+  const value =
+    Number(
+      raw
+    );
+
+
+  if (
+    !Number.isFinite(
+      value
+    )
+  ) {
+
+    errors.push(
+      label +
+      ' must be a valid number.'
+    );
+
+    return NaN;
+
+  }
 
 
   return value;
@@ -852,37 +1129,158 @@ function getNumber(
 }
 
 
+/* =========================================================
+   DISPLAY SCALE
+========================================================= */
+
+function makeDisplayDimensions(
+  type,
+  raw,
+  L
+) {
+
+  let maxDim;
+
+
+  if (
+    type === 'rect'
+  ) {
+
+    maxDim =
+      Math.max(
+        raw.b,
+        raw.h
+      );
+
+  }
+
+  else if (
+    type === 'circle'
+  ) {
+
+    maxDim =
+      raw.d;
+
+  }
+
+  else if (
+    type === 'hollow'
+  ) {
+
+    maxDim =
+      raw.D;
+
+  }
+
+  else {
+
+    maxDim =
+      Math.max(
+        raw.H,
+        raw.B
+      );
+
+  }
+
+
+  const natural =
+    maxDim /
+    L *
+    BEAM_SCENE_LENGTH *
+    1.8;
+
+
+  const target =
+    THREE.MathUtils.clamp(
+      natural,
+      0.38,
+      1.25
+    );
+
+
+  const s =
+    target /
+    maxDim;
+
+
+  if (
+    type === 'rect'
+  ) {
+
+    return {
+      b: raw.b * s,
+      h: raw.h * s
+    };
+
+  }
+
+
+  if (
+    type === 'circle'
+  ) {
+
+    return {
+      d: raw.d * s
+    };
+
+  }
+
+
+  if (
+    type === 'hollow'
+  ) {
+
+    return {
+      D: raw.D * s,
+      d: raw.d * s
+    };
+
+  }
+
+
+  return {
+    H: raw.H * s,
+    B: raw.B * s,
+    tf: raw.tf * s,
+    tw: raw.tw * s
+  };
+
+}
+
 
 /* =========================================================
    CROSS SECTION PROPERTIES
 ========================================================= */
 
-
-function getSectionProperties(
-  errors
+function getSectionData(
+  errors,
+  L
 ) {
 
-
   const type =
-    sectionType.value;
+    sectionTypeEl.value;
 
 
+  let raw =
+    {};
 
-  if (type === "rect") {
 
+  if (
+    type === 'rect'
+  ) {
 
     const b =
       getNumber(
-        "width",
-        "Width",
+        'width',
+        'Width',
         errors
       );
 
 
     const h =
       getNumber(
-        "height",
-        "Height",
+        'height',
+        'Height',
         errors
       );
 
@@ -894,7 +1292,7 @@ function getSectionProperties(
     ) {
 
       errors.push(
-        "Width must be greater than 0."
+        'Width must be greater than 0.'
       );
 
     }
@@ -907,20 +1305,30 @@ function getSectionProperties(
     ) {
 
       errors.push(
-        "Height must be greater than 0."
+        'Height must be greater than 0.'
       );
 
     }
 
 
-    if (errors.length) {
+    if (
+      errors.length
+    ) {
 
       return null;
 
     }
 
 
+    raw = {
+      b,
+      h
+    };
+
+
     return {
+
+      type,
 
       I:
         b *
@@ -933,21 +1341,30 @@ function getSectionProperties(
 
       c:
         h /
-        2
+        2,
+
+      raw,
+
+      display:
+        makeDisplayDimensions(
+          type,
+          raw,
+          L
+        )
 
     };
 
   }
 
 
-
-  if (type === "circle") {
-
+  if (
+    type === 'circle'
+  ) {
 
     const d =
       getNumber(
-        "diameter",
-        "Diameter",
+        'diameter',
+        'Diameter',
         errors
       );
 
@@ -959,20 +1376,29 @@ function getSectionProperties(
     ) {
 
       errors.push(
-        "Diameter must be greater than 0."
+        'Diameter must be greater than 0.'
       );
 
     }
 
 
-    if (errors.length) {
+    if (
+      errors.length
+    ) {
 
       return null;
 
     }
 
 
+    raw = {
+      d
+    };
+
+
     return {
+
+      type,
 
       I:
         Math.PI *
@@ -985,29 +1411,38 @@ function getSectionProperties(
 
       c:
         d /
-        2
+        2,
+
+      raw,
+
+      display:
+        makeDisplayDimensions(
+          type,
+          raw,
+          L
+        )
 
     };
 
   }
 
 
-
-  if (type === "hollow") {
-
+  if (
+    type === 'hollow'
+  ) {
 
     const D =
       getNumber(
-        "outerDiameter",
-        "Outer Diameter",
+        'outerDiameter',
+        'Outer Diameter',
         errors
       );
 
 
     const d =
       getNumber(
-        "innerDiameter",
-        "Inner Diameter",
+        'innerDiameter',
+        'Inner Diameter',
         errors
       );
 
@@ -1019,7 +1454,7 @@ function getSectionProperties(
     ) {
 
       errors.push(
-        "Outer Diameter must be greater than 0."
+        'Outer Diameter must be greater than 0.'
       );
 
     }
@@ -1032,7 +1467,7 @@ function getSectionProperties(
     ) {
 
       errors.push(
-        "Inner Diameter cannot be negative."
+        'Inner Diameter cannot be negative.'
       );
 
     }
@@ -1047,20 +1482,30 @@ function getSectionProperties(
     ) {
 
       errors.push(
-        "Inner Diameter must be smaller than Outer Diameter."
+        'Inner Diameter must be smaller than Outer Diameter.'
       );
 
     }
 
 
-    if (errors.length) {
+    if (
+      errors.length
+    ) {
 
       return null;
 
     }
 
 
+    raw = {
+      D,
+      d
+    };
+
+
     return {
+
+      type,
 
       I:
         Math.PI *
@@ -1080,42 +1525,50 @@ function getSectionProperties(
 
       c:
         D /
-        2
+        2,
+
+      raw,
+
+      display:
+        makeDisplayDimensions(
+          type,
+          raw,
+          L
+        )
 
     };
 
   }
 
 
-
   const H =
     getNumber(
-      "iHeight",
-      "Overall Height",
+      'iHeight',
+      'Overall Height',
       errors
     );
 
 
   const B =
     getNumber(
-      "flangeWidth",
-      "Flange Width",
+      'flangeWidth',
+      'Flange Width',
       errors
     );
 
 
   const tf =
     getNumber(
-      "flangeThickness",
-      "Flange Thickness",
+      'flangeThickness',
+      'Flange Thickness',
       errors
     );
 
 
   const tw =
     getNumber(
-      "webThickness",
-      "Web Thickness",
+      'webThickness',
+      'Web Thickness',
       errors
     );
 
@@ -1127,7 +1580,7 @@ function getSectionProperties(
   ) {
 
     errors.push(
-      "Overall Height must be greater than 0."
+      'Overall Height must be greater than 0.'
     );
 
   }
@@ -1140,7 +1593,7 @@ function getSectionProperties(
   ) {
 
     errors.push(
-      "Flange Width must be greater than 0."
+      'Flange Width must be greater than 0.'
     );
 
   }
@@ -1153,7 +1606,7 @@ function getSectionProperties(
   ) {
 
     errors.push(
-      "Flange Thickness must be greater than 0."
+      'Flange Thickness must be greater than 0.'
     );
 
   }
@@ -1166,7 +1619,7 @@ function getSectionProperties(
   ) {
 
     errors.push(
-      "Web Thickness must be greater than 0."
+      'Web Thickness must be greater than 0.'
     );
 
   }
@@ -1181,7 +1634,7 @@ function getSectionProperties(
   ) {
 
     errors.push(
-      "Twice the flange thickness must be smaller than the overall height."
+      'Twice the flange thickness must be smaller than the overall height.'
     );
 
   }
@@ -1196,13 +1649,15 @@ function getSectionProperties(
   ) {
 
     errors.push(
-      "Web Thickness cannot be larger than Flange Width."
+      'Web Thickness cannot be larger than Flange Width.'
     );
 
   }
 
 
-  if (errors.length) {
+  if (
+    errors.length
+  ) {
 
     return null;
 
@@ -1253,7 +1708,17 @@ function getSectionProperties(
     12;
 
 
+  raw = {
+    H,
+    B,
+    tf,
+    tw
+  };
+
+
   return {
+
+    type,
 
     I:
       2 *
@@ -1263,18 +1728,25 @@ function getSectionProperties(
 
     c:
       H /
-      2
+      2,
+
+    raw,
+
+    display:
+      makeDisplayDimensions(
+        type,
+        raw,
+        L
+      )
 
   };
 
 }
 
 
-
 /* =========================================================
-   DEFLECTION
+   DEFLECTION EQUATIONS
 ========================================================= */
-
 
 function deflectionAtX(
   type,
@@ -1286,11 +1758,9 @@ function deflectionAtX(
   I
 ) {
 
-
   if (
-    type === "simply"
+    type === 'simply'
   ) {
-
 
     const b =
       L - a;
@@ -1299,7 +1769,6 @@ function deflectionAtX(
     if (
       x <= a
     ) {
-
 
       return (
 
@@ -1327,7 +1796,6 @@ function deflectionAtX(
       );
 
     }
-
 
 
     const lx =
@@ -1362,11 +1830,9 @@ function deflectionAtX(
   }
 
 
-
   if (
     x <= a
   ) {
-
 
     return (
 
@@ -1390,7 +1856,6 @@ function deflectionAtX(
     );
 
   }
-
 
 
   return (
@@ -1417,177 +1882,1354 @@ function deflectionAtX(
 }
 
 
-
 /* =========================================================
-   MAX DEFLECTION
+   VERIFIED MAXIMUM DEFLECTION POSITION
 ========================================================= */
 
-
-function findMaxDeflection(
+function maxDeflectionPosition(
   type,
-  P,
   L,
-  a,
-  E,
-  I
+  a
 ) {
 
-
-  const samples =
-    12000;
-
-
-  let maxDeflection =
-    -1;
-
-
-  let maxX =
-    0;
-
-
-  for (
-    let i = 0;
-    i <= samples;
-    i++
+  if (
+    type === 'cantilever'
   ) {
 
-
-    const x =
-      L *
-      i
-      /
-      samples;
-
-
-    const y =
-      Math.abs(
-
-        deflectionAtX(
-          type,
-          x,
-          P,
-          L,
-          a,
-          E,
-          I
-        )
-
-      );
-
-
-    if (
-      y >
-      maxDeflection
-    ) {
-
-
-      maxDeflection =
-        y;
-
-
-      maxX =
-        x;
-
-    }
+    return L;
 
   }
 
 
+  if (
+    Math.abs(
+      a -
+      L / 2
+    )
+    <
+    1e-10
+  ) {
+
+    return L / 2;
+
+  }
+
+
+  if (
+    a <
+    L / 2
+  ) {
+
+    return (
+
+      L
+
+      -
+
+      Math.sqrt(
+
+        (
+          L * L
+          -
+          a * a
+        )
+
+        /
+
+        3
+
+      )
+
+    );
+
+  }
+
+
+  return Math.sqrt(
+
+    a *
+    (
+      2 * L
+      -
+      a
+    )
+
+    /
+
+    3
+
+  );
+
+}
+
+
+/* =========================================================
+   MATERIALS
+========================================================= */
+
+function beamMaterial() {
+
+  const name =
+    materialEl
+      .options[
+        materialEl.selectedIndex
+      ]
+      .dataset
+      .name;
+
+
+  const color =
+
+    name === 'Wood'
+
+      ?
+
+      0xb9895a
+
+      :
+
+      (
+        name === 'Aluminum'
+          ?
+          0xcbd5e1
+          :
+          0x9aa7b6
+      );
+
+
+  return new THREE.MeshStandardMaterial({
+
+    color,
+
+    metalness:
+      name === 'Wood'
+        ?
+        0.05
+        :
+        0.45,
+
+    roughness:
+      name === 'Wood'
+        ?
+        0.65
+        :
+        0.35
+
+  });
+
+}
+
+
+const supportMaterial =
+  new THREE.MeshStandardMaterial({
+    color: 0x374151,
+    metalness: 0.25,
+    roughness: 0.55
+  });
+
+
+const baseMaterial =
+  new THREE.MeshStandardMaterial({
+    color: 0x94a3b8,
+    metalness: 0.1,
+    roughness: 0.8
+  });
+
+
+const redMaterial =
+  new THREE.MeshStandardMaterial({
+    color: 0xdc2626,
+    metalness: 0.15,
+    roughness: 0.45
+  });
+
+
+const blackMaterial =
+  new THREE.MeshStandardMaterial({
+    color: 0x111827,
+    metalness: 0.15,
+    roughness: 0.5
+  });
+
+
+const hitMaterial =
+  new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0,
+    depthWrite: false,
+    side: THREE.DoubleSide
+  });
+
+
+/* =========================================================
+   BUILD 3D BEAM
+========================================================= */
+
+function buildBeam(
+  section
+) {
+
+  let geometry;
+
+  let halfHeight;
+
+
+  if (
+    section.type === 'rect'
+  ) {
+
+    const {
+      b,
+      h
+    } =
+      section.display;
+
+
+    geometry =
+      new THREE.BoxGeometry(
+        BEAM_SCENE_LENGTH,
+        h,
+        b
+      );
+
+
+    halfHeight =
+      h /
+      2;
+
+  }
+
+
+  else if (
+    section.type === 'circle'
+  ) {
+
+    const r =
+      section.display.d /
+      2;
+
+
+    geometry =
+      new THREE.CylinderGeometry(
+        r,
+        r,
+        BEAM_SCENE_LENGTH,
+        48,
+        1,
+        false
+      );
+
+
+    geometry.rotateZ(
+      Math.PI /
+      2
+    );
+
+
+    halfHeight =
+      r;
+
+  }
+
+
+  else if (
+    section.type === 'hollow'
+  ) {
+
+    const R =
+      section.display.D /
+      2;
+
+
+    const r =
+      section.display.d /
+      2;
+
+
+    const shape =
+      new THREE.Shape();
+
+
+    shape.absarc(
+      0,
+      0,
+      R,
+      0,
+      Math.PI * 2,
+      false
+    );
+
+
+    const hole =
+      new THREE.Path();
+
+
+    hole.absarc(
+      0,
+      0,
+      r,
+      0,
+      Math.PI * 2,
+      true
+    );
+
+
+    shape.holes.push(
+      hole
+    );
+
+
+    geometry =
+      new THREE.ExtrudeGeometry(
+
+        shape,
+
+        {
+          depth:
+            BEAM_SCENE_LENGTH,
+
+          bevelEnabled:
+            false,
+
+          curveSegments:
+            48,
+
+          steps:
+            1
+        }
+
+      );
+
+
+    geometry.translate(
+      0,
+      0,
+      -BEAM_SCENE_LENGTH / 2
+    );
+
+
+    geometry.rotateY(
+      Math.PI /
+      2
+    );
+
+
+    halfHeight =
+      R;
+
+  }
+
+
+  else {
+
+    const {
+      H,
+      B,
+      tf,
+      tw
+    } =
+      section.display;
+
+
+    const s =
+      new THREE.Shape();
+
+
+    s.moveTo(
+      -B / 2,
+      H / 2
+    );
+
+
+    s.lineTo(
+      B / 2,
+      H / 2
+    );
+
+
+    s.lineTo(
+      B / 2,
+      H / 2 - tf
+    );
+
+
+    s.lineTo(
+      tw / 2,
+      H / 2 - tf
+    );
+
+
+    s.lineTo(
+      tw / 2,
+      -H / 2 + tf
+    );
+
+
+    s.lineTo(
+      B / 2,
+      -H / 2 + tf
+    );
+
+
+    s.lineTo(
+      B / 2,
+      -H / 2
+    );
+
+
+    s.lineTo(
+      -B / 2,
+      -H / 2
+    );
+
+
+    s.lineTo(
+      -B / 2,
+      -H / 2 + tf
+    );
+
+
+    s.lineTo(
+      -tw / 2,
+      -H / 2 + tf
+    );
+
+
+    s.lineTo(
+      -tw / 2,
+      H / 2 - tf
+    );
+
+
+    s.lineTo(
+      -B / 2,
+      H / 2 - tf
+    );
+
+
+    s.closePath();
+
+
+    geometry =
+      new THREE.ExtrudeGeometry(
+
+        s,
+
+        {
+          depth:
+            BEAM_SCENE_LENGTH,
+
+          bevelEnabled:
+            false,
+
+          steps:
+            1
+        }
+
+      );
+
+
+    geometry.translate(
+      0,
+      0,
+      -BEAM_SCENE_LENGTH / 2
+    );
+
+
+    geometry.rotateY(
+      Math.PI /
+      2
+    );
+
+
+    halfHeight =
+      H /
+      2;
+
+  }
+
+
+  geometry.computeVertexNormals();
+
+
+  const mesh =
+    new THREE.Mesh(
+      geometry,
+      beamMaterial()
+    );
+
+
+  mesh.castShadow =
+    true;
+
+
+  mesh.receiveShadow =
+    true;
+
+
+  structureGroup.add(
+    mesh
+  );
+
+
   return {
-
-    maxDeflection:
-      maxDeflection,
-
-    maxX:
-      maxX
-
+    mesh,
+    halfHeight
   };
 
 }
 
 
-
 /* =========================================================
-   ERROR
+   SUPPORTS
 ========================================================= */
 
-
-function showError(
-  errors
+function addSimplySupportedSupports(
+  halfHeight
 ) {
 
+  const apexY =
+    -halfHeight
+    -
+    0.03;
 
-  const errorBox =
-    document.getElementById(
-      "errorBox"
+
+  const supportH =
+    0.72;
+
+
+  const pin =
+    new THREE.Mesh(
+
+      new THREE.ConeGeometry(
+        0.42,
+        supportH,
+        4
+      ),
+
+      supportMaterial
+
     );
 
 
-  errorBox.textContent =
-    errors.join(
-      "\n"
+  pin.position.set(
+
+    -HALF_BEAM,
+
+    apexY
+    -
+    supportH / 2,
+
+    0
+
+  );
+
+
+  pin.castShadow =
+    true;
+
+
+  structureGroup.add(
+    pin
+  );
+
+
+  const pinBase =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+        1.05,
+        0.12,
+        0.95
+      ),
+
+      baseMaterial
+
     );
 
 
-  errorBox.style.display =
-    "block";
+  pinBase.position.set(
+
+    -HALF_BEAM,
+
+    apexY
+    -
+    supportH
+    -
+    0.06,
+
+    0
+
+  );
+
+
+  pinBase.castShadow =
+    true;
+
+
+  structureGroup.add(
+    pinBase
+  );
+
+
+  const rollerCone =
+    new THREE.Mesh(
+
+      new THREE.ConeGeometry(
+        0.42,
+        supportH,
+        4
+      ),
+
+      supportMaterial
+
+    );
+
+
+  rollerCone.position.set(
+
+    HALF_BEAM,
+
+    apexY
+    -
+    supportH / 2,
+
+    0
+
+  );
+
+
+  rollerCone.castShadow =
+    true;
+
+
+  structureGroup.add(
+    rollerCone
+  );
+
+
+  const rollerY =
+    apexY
+    -
+    supportH
+    -
+    0.16;
+
+
+  [
+    -0.22,
+    0.22
+  ].forEach(
+
+    z => {
+
+      const roller =
+        new THREE.Mesh(
+
+          new THREE.CylinderGeometry(
+            0.12,
+            0.12,
+            0.55,
+            24
+          ),
+
+          supportMaterial
+
+        );
+
+
+      roller.rotation.x =
+        Math.PI /
+        2;
+
+
+      roller.position.set(
+        HALF_BEAM,
+        rollerY,
+        z
+      );
+
+
+      roller.castShadow =
+        true;
+
+
+      structureGroup.add(
+        roller
+      );
+
+    }
+
+  );
+
+
+  const rollerBase =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+        1.05,
+        0.12,
+        1.05
+      ),
+
+      baseMaterial
+
+    );
+
+
+  rollerBase.position.set(
+
+    HALF_BEAM,
+
+    rollerY
+    -
+    0.18,
+
+    0
+
+  );
+
+
+  rollerBase.castShadow =
+    true;
+
+
+  structureGroup.add(
+    rollerBase
+  );
 
 }
 
 
+function addCantileverSupport(
+  halfHeight
+) {
 
-function clearError() {
-
-
-  const errorBox =
-    document.getElementById(
-      "errorBox"
+  const wallH =
+    Math.max(
+      2.7,
+      halfHeight *
+      5.5
     );
 
 
-  errorBox.textContent =
-    "";
+  const wallD =
+    Math.max(
+      2.5,
+      halfHeight *
+      5.0
+    );
 
 
-  errorBox.style.display =
-    "none";
+  const wall =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+        0.34,
+        wallH,
+        wallD
+      ),
+
+      baseMaterial
+
+    );
+
+
+  wall.position.set(
+
+    -HALF_BEAM
+    -
+    0.18,
+
+    0,
+
+    0
+
+  );
+
+
+  wall.castShadow =
+    true;
+
+
+  wall.receiveShadow =
+    true;
+
+
+  structureGroup.add(
+    wall
+  );
+
+
+  const plate =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+        0.12,
+        wallH * 0.92,
+        wallD * 0.92
+      ),
+
+      supportMaterial
+
+    );
+
+
+  plate.position.set(
+
+    -HALF_BEAM
+    +
+    0.01,
+
+    0,
+
+    0
+
+  );
+
+
+  plate.castShadow =
+    true;
+
+
+  structureGroup.add(
+    plate
+  );
 
 }
 
+
+/* =========================================================
+   3D POINT LOAD
+========================================================= */
+
+function addPointLoad(
+  localX,
+  halfHeight
+) {
+
+  const group =
+    new THREE.Group();
+
+
+  group.position.x =
+    localX;
+
+
+  const coneH =
+    0.34;
+
+
+  const shaftH =
+    1.15;
+
+
+  const cone =
+    new THREE.Mesh(
+
+      new THREE.ConeGeometry(
+        0.19,
+        coneH,
+        28
+      ),
+
+      redMaterial
+
+    );
+
+
+  cone.rotation.z =
+    Math.PI;
+
+
+  cone.position.y =
+    halfHeight
+    +
+    coneH / 2;
+
+
+  cone.castShadow =
+    true;
+
+
+  group.add(
+    cone
+  );
+
+
+  const shaft =
+    new THREE.Mesh(
+
+      new THREE.CylinderGeometry(
+        0.055,
+        0.055,
+        shaftH,
+        20
+      ),
+
+      redMaterial
+
+    );
+
+
+  shaft.position.y =
+
+    halfHeight
+
+    +
+
+    coneH
+
+    +
+
+    shaftH / 2;
+
+
+  shaft.castShadow =
+    true;
+
+
+  group.add(
+    shaft
+  );
+
+
+  const grip =
+    new THREE.Mesh(
+
+      new THREE.SphereGeometry(
+        0.13,
+        24,
+        16
+      ),
+
+      redMaterial
+
+    );
+
+
+  grip.position.y =
+
+    halfHeight
+
+    +
+
+    coneH
+
+    +
+
+    shaftH
+
+    +
+
+    0.08;
+
+
+  grip.castShadow =
+    true;
+
+
+  group.add(
+    grip
+  );
+
+
+  const hitH =
+    coneH
+    +
+    shaftH
+    +
+    0.55;
+
+
+  const hit =
+    new THREE.Mesh(
+
+      new THREE.BoxGeometry(
+        0.72,
+        hitH,
+        0.72
+      ),
+
+      hitMaterial
+
+    );
+
+
+  hit.position.y =
+
+    halfHeight
+
+    +
+
+    hitH / 2
+
+    -
+
+    0.02;
+
+
+  group.add(
+    hit
+  );
+
+
+  loadHitbox =
+    hit;
+
+
+  structureGroup.add(
+    group
+  );
+
+}
+
+
+/* =========================================================
+   3D DEFLECTION CURVE
+========================================================= */
+
+function addDeflectionCurve(
+  state
+) {
+
+  const points =
+    [];
+
+
+  const count =
+    120;
+
+
+  for (
+    let i = 0;
+    i <= count;
+    i++
+  ) {
+
+    const xReal =
+      state.L *
+      i /
+      count;
+
+
+    const xLocal =
+
+      -HALF_BEAM
+
+      +
+
+      BEAM_SCENE_LENGTH
+
+      *
+
+      (
+        xReal /
+        state.L
+      );
+
+
+    const yReal =
+      Math.abs(
+
+        deflectionAtX(
+
+          state.beamType,
+
+          xReal,
+
+          state.P,
+
+          state.L,
+
+          state.a,
+
+          state.E,
+
+          state.section.I
+
+        )
+
+      );
+
+
+    const ratio =
+
+      state.maxDeflection > 0
+
+        ?
+
+        yReal /
+        state.maxDeflection
+
+        :
+
+        0;
+
+
+    points.push(
+
+      new THREE.Vector3(
+
+        xLocal,
+
+        -ratio *
+        DEFLECTION_VISUAL_AMPLITUDE,
+
+        0
+
+      )
+
+    );
+
+  }
+
+
+  const curve =
+    new THREE.CatmullRomCurve3(
+      points
+    );
+
+
+  const tube =
+    new THREE.Mesh(
+
+      new THREE.TubeGeometry(
+        curve,
+        180,
+        0.035,
+        10,
+        false
+      ),
+
+      new THREE.MeshStandardMaterial({
+
+        color:
+          0x2563eb,
+
+        emissive:
+          0x102a66,
+
+        emissiveIntensity:
+          0.12,
+
+        roughness:
+          0.35
+
+      })
+
+    );
+
+
+  tube.castShadow =
+    true;
+
+
+  structureGroup.add(
+    tube
+  );
+
+
+  const xLocal =
+
+    -HALF_BEAM
+
+    +
+
+    BEAM_SCENE_LENGTH
+
+    *
+
+    (
+      state.maxX /
+      state.L
+    );
+
+
+  const marker =
+    new THREE.Mesh(
+
+      new THREE.SphereGeometry(
+        0.11,
+        24,
+        16
+      ),
+
+      blackMaterial
+
+    );
+
+
+  marker.position.set(
+
+    xLocal,
+
+    -DEFLECTION_VISUAL_AMPLITUDE,
+
+    0
+
+  );
+
+
+  marker.castShadow =
+    true;
+
+
+  structureGroup.add(
+    marker
+  );
+
+}
+
+
+/* =========================================================
+   CLEAR 3D OBJECTS
+========================================================= */
+
+function clearStructure() {
+
+  loadHitbox =
+    null;
+
+
+  while (
+    structureGroup.children.length
+  ) {
+
+    const obj =
+      structureGroup.children.pop();
+
+
+    obj.traverse(
+
+      child => {
+
+        if (
+          child.geometry
+        ) {
+
+          child.geometry.dispose();
+
+        }
+
+
+        if (
+          child.material
+
+          &&
+
+          child.material !== supportMaterial
+
+          &&
+
+          child.material !== baseMaterial
+
+          &&
+
+          child.material !== redMaterial
+
+          &&
+
+          child.material !== blackMaterial
+
+          &&
+
+          child.material !== hitMaterial
+        ) {
+
+          if (
+            Array.isArray(
+              child.material
+            )
+          ) {
+
+            child.material.forEach(
+              m => m.dispose()
+            );
+
+          }
+
+          else {
+
+            child.material.dispose();
+
+          }
+
+        }
+
+      }
+
+    );
+
+  }
+
+}
 
 
 /* =========================================================
    FORMAT
 ========================================================= */
 
-
 function formatNumber(
   value,
   digits = 4
 ) {
 
-
   return value.toLocaleString(
+
     undefined,
+
     {
       maximumFractionDigits:
         digits
     }
+
   );
 
 }
 
+
+/* =========================================================
+   ERROR MESSAGE
+========================================================= */
+
+function showErrors(
+  errors
+) {
+
+  errorBox.textContent =
+    errors.join(
+      '\n'
+    );
+
+
+  errorBox.style.display =
+    'block';
+
+}
+
+
+function clearErrors() {
+
+  errorBox.textContent =
+    '';
+
+
+  errorBox.style.display =
+    'none';
+
+}
 
 
 /* =========================================================
    CALCULATION
 ========================================================= */
 
+function calculateBeam(
+  showValidation = true
+) {
 
-function calculateBeam() {
-
-
-  clearError();
+  clearErrors();
 
 
   const errors =
@@ -1595,41 +3237,35 @@ function calculateBeam() {
 
 
   const beamType =
-    document.getElementById(
-      "beamType"
-    ).value;
+    beamTypeEl.value;
 
 
   const E =
     Number(
-
-      document.getElementById(
-        "material"
-      ).value
-
+      materialEl.value
     );
 
 
   const L =
     getNumber(
-      "length",
-      "Beam Length",
+      'length',
+      'Beam Length',
       errors
     );
 
 
   const P =
     getNumber(
-      "load",
-      "Point Load",
+      'load',
+      'Point Load',
       errors
     );
 
 
   const a =
     getNumber(
-      "position",
-      "Load Position",
+      'position',
+      'Load Position',
       errors
     );
 
@@ -1641,7 +3277,7 @@ function calculateBeam() {
   ) {
 
     errors.push(
-      "Beam Length must be greater than 0."
+      'Beam Length must be greater than 0.'
     );
 
   }
@@ -1654,7 +3290,7 @@ function calculateBeam() {
   ) {
 
     errors.push(
-      "Point Load must be greater than 0."
+      'Point Load must be greater than 0.'
     );
 
   }
@@ -1667,7 +3303,7 @@ function calculateBeam() {
   ) {
 
     errors.push(
-      "Load Position must be greater than 0."
+      'Load Position must be greater than 0.'
     );
 
   }
@@ -1679,28 +3315,27 @@ function calculateBeam() {
     Number.isFinite(a)
   ) {
 
-
     if (
-      beamType === "simply"
+      beamType === 'simply'
       &&
       a >= L
     ) {
 
       errors.push(
-        "For a simply supported beam, Load Position must be smaller than Beam Length."
+        'For a simply supported beam, Load Position must be smaller than Beam Length.'
       );
 
     }
 
 
     if (
-      beamType === "cantilever"
+      beamType === 'cantilever'
       &&
       a > L
     ) {
 
       errors.push(
-        "For a cantilever beam, Load Position cannot exceed Beam Length."
+        'For a cantilever beam, Load Position cannot exceed Beam Length.'
       );
 
     }
@@ -1709,44 +3344,50 @@ function calculateBeam() {
 
 
   const section =
-    getSectionProperties(
-      errors
-    );
+
+    Number.isFinite(L)
+    &&
+    L > 0
+
+      ?
+
+      getSectionData(
+        errors,
+        L
+      )
+
+      :
+
+      null;
 
 
   if (
-    errors.length > 0
+    errors.length
     ||
     !section
   ) {
 
+    if (
+      showValidation
+    ) {
 
-    showError(
-      errors
-    );
+      showErrors(
+        errors
+      );
 
+    }
 
-    return;
+    return false;
 
   }
 
 
-  const I =
-    section.I;
-
-
-  const c =
-    section.c;
-
-
-  let Mmax =
-    0;
+  let Mmax;
 
 
   if (
-    beamType === "simply"
+    beamType === 'simply'
   ) {
-
 
     const b =
       L - a;
@@ -1755,15 +3396,13 @@ function calculateBeam() {
     Mmax =
       P *
       a *
-      b
-      /
+      b /
       L;
 
   }
 
 
   else {
-
 
     Mmax =
       P *
@@ -1772,54 +3411,86 @@ function calculateBeam() {
   }
 
 
-  const deflectionData =
-    findMaxDeflection(
+  const maxX =
+    maxDeflectionPosition(
       beamType,
-      P,
       L,
-      a,
-      E,
-      I
+      a
     );
 
 
   const maxDeflection =
-    deflectionData.maxDeflection;
+    Math.abs(
 
+      deflectionAtX(
 
-  const maxX =
-    deflectionData.maxX;
+        beamType,
+
+        maxX,
+
+        P,
+
+        L,
+
+        a,
+
+        E,
+
+        section.I
+
+      )
+
+    );
 
 
   const maxStress =
     Mmax *
-    c
-    /
-    I;
+    section.c /
+    section.I;
 
 
   const maxStrain =
-    maxStress
-    /
+    maxStress /
     E;
 
 
+  const state = {
+
+    beamType,
+    E,
+    L,
+    P,
+    a,
+    section,
+    Mmax,
+    maxX,
+    maxDeflection,
+    maxStress,
+    maxStrain
+
+  };
+
+
+  lastValidState =
+    state;
+
+
   document.getElementById(
-    "momentResult"
+    'momentResult'
   ).textContent =
 
     formatNumber(
-      Mmax / 1000000,
+      Mmax / 1e6,
       4
     )
 
     +
 
-    " kN·m";
+    ' kN·m';
 
 
   document.getElementById(
-    "deflectionResult"
+    'deflectionResult'
   ).textContent =
 
     formatNumber(
@@ -1829,11 +3500,11 @@ function calculateBeam() {
 
     +
 
-    " mm";
+    ' mm';
 
 
   document.getElementById(
-    "positionResult"
+    'positionResult'
   ).textContent =
 
     formatNumber(
@@ -1843,11 +3514,11 @@ function calculateBeam() {
 
     +
 
-    " mm";
+    ' mm';
 
 
   document.getElementById(
-    "stressResult"
+    'stressResult'
   ).textContent =
 
     formatNumber(
@@ -1857,11 +3528,11 @@ function calculateBeam() {
 
     +
 
-    " MPa";
+    ' MPa';
 
 
   document.getElementById(
-    "strainResult"
+    'strainResult'
   ).textContent =
 
     maxStrain.toExponential(
@@ -1870,1269 +3541,264 @@ function calculateBeam() {
 
 
   document.getElementById(
-    "inertiaResult"
+    'inertiaResult'
   ).textContent =
 
     formatNumber(
-      I,
+      section.I,
       2
     )
 
     +
 
-    " mm⁴";
+    ' mm⁴';
 
 
-  drawBeam(
-    beamType,
-    P,
-    L,
-    a,
-    E,
-    I,
-    maxDeflection,
-    maxX
+  loadHud.textContent =
+
+    `P = ${formatNumber(P,2)} N / a = ${formatNumber(a,2)} mm`;
+
+
+  maxHud.textContent =
+
+    `x = ${formatNumber(maxX,2)} mm / δmax = ${formatNumber(maxDeflection,4)} mm`;
+
+
+  rebuild3D(
+    state
+  );
+
+
+  return true;
+
+}
+
+
+/* =========================================================
+   BUILD COMPLETE 3D SCENE
+========================================================= */
+
+function rebuild3D(
+  state
+) {
+
+  clearStructure();
+
+
+  structureGroup.rotation.y =
+    STRUCTURE_Y_ROTATION;
+
+
+  const beam =
+    buildBeam(
+      state.section
+    );
+
+
+  if (
+    state.beamType ===
+    'simply'
+  ) {
+
+    addSimplySupportedSupports(
+      beam.halfHeight
+    );
+
+  }
+
+
+  else {
+
+    addCantileverSupport(
+      beam.halfHeight
+    );
+
+  }
+
+
+  const loadLocalX =
+
+    -HALF_BEAM
+
+    +
+
+    BEAM_SCENE_LENGTH
+
+    *
+
+    (
+      state.a /
+      state.L
+    );
+
+
+  addPointLoad(
+    loadLocalX,
+    beam.halfHeight
+  );
+
+
+  addDeflectionCurve(
+    state
   );
 
 }
 
 
-
 /* =========================================================
-   2.5D RECTANGULAR BEAM
+   3D LOAD DRAG
 ========================================================= */
 
-
-function drawRectangularBeam(
-  left,
-  right,
-  y
+function updatePointerFromEvent(
+  event
 ) {
 
+  const rect =
+    renderer
+      .domElement
+      .getBoundingClientRect();
 
-  const depthX =
-    20;
 
+  pointer.x =
 
-  const depthY =
-    -13;
-
-
-  const h =
-    28;
-
-
-  return `
-
-    <polygon
-      points="
-      ${left},${y - h / 2}
-      ${right},${y - h / 2}
-      ${right + depthX},${y - h / 2 + depthY}
-      ${left + depthX},${y - h / 2 + depthY}
-      "
-      fill="url(#topGradient)"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <rect
-      x="${left}"
-      y="${y - h / 2}"
-      width="${right - left}"
-      height="${h}"
-      fill="url(#frontGradient)"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <polygon
-      points="
-      ${right},${y - h / 2}
-      ${right + depthX},${y - h / 2 + depthY}
-      ${right + depthX},${y + h / 2 + depthY}
-      ${right},${y + h / 2}
-      "
-      fill="#94a3b8"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-  `;
-
-}
-
-
-
-/* =========================================================
-   2.5D SOLID SHAFT
-========================================================= */
-
-
-function drawCircularBeam(
-  left,
-  right,
-  y
-) {
-
-
-  return `
-
-    <rect
-      x="${left}"
-      y="${y - 15}"
-      width="${right - left}"
-      height="30"
-      rx="14"
-      fill="url(#cylinderGradient)"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <ellipse
-      cx="${left}"
-      cy="${y}"
-      rx="12"
-      ry="15"
-      fill="#dbeafe"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <ellipse
-      cx="${right}"
-      cy="${y}"
-      rx="12"
-      ry="15"
-      fill="#94a3b8"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <line
-      x1="${left + 8}"
-      y1="${y - 9}"
-      x2="${right - 8}"
-      y2="${y - 9}"
-      stroke="rgba(255,255,255,0.75)"
-      stroke-width="3"
-      stroke-linecap="round"
-    />
-
-  `;
-
-}
-
-
-
-/* =========================================================
-   2.5D HOLLOW PIPE
-========================================================= */
-
-
-function drawHollowBeam(
-  left,
-  right,
-  y
-) {
-
-
-  return `
-
-    <rect
-      x="${left}"
-      y="${y - 17}"
-      width="${right - left}"
-      height="34"
-      rx="16"
-      fill="url(#cylinderGradient)"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <ellipse
-      cx="${left}"
-      cy="${y}"
-      rx="13"
-      ry="17"
-      fill="#dbeafe"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <ellipse
-      cx="${right}"
-      cy="${y}"
-      rx="13"
-      ry="17"
-      fill="#94a3b8"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <ellipse
-      cx="${right}"
-      cy="${y}"
-      rx="7"
-      ry="10"
-      fill="#f8fafc"
-      stroke="#475569"
-      stroke-width="2"
-    />
-
-
-    <ellipse
-      cx="${right}"
-      cy="${y}"
-      rx="4"
-      ry="6"
-      fill="#334155"
-      opacity="0.4"
-    />
-
-
-    <line
-      x1="${left + 8}"
-      y1="${y - 10}"
-      x2="${right - 8}"
-      y2="${y - 10}"
-      stroke="rgba(255,255,255,0.75)"
-      stroke-width="3"
-      stroke-linecap="round"
-    />
-
-  `;
-
-}
-
-
-
-/* =========================================================
-   2.5D I-BEAM
-========================================================= */
-
-
-function drawIBeam(
-  left,
-  right,
-  y
-) {
-
-
-  const dx =
-    18;
-
-
-  const dy =
-    -11;
-
-
-  return `
-
-    <!-- BACK PROFILE -->
-
-    <path
-      d="
-      M ${left + dx} ${y - 27 + dy}
-      L ${right + dx} ${y - 27 + dy}
-      L ${right + dx} ${y - 17 + dy}
-      L ${right - 2 + dx} ${y - 17 + dy}
-      L ${right - 2 + dx} ${y + 17 + dy}
-      L ${right + dx} ${y + 17 + dy}
-      L ${right + dx} ${y + 27 + dy}
-      L ${left + dx} ${y + 27 + dy}
-      L ${left + dx} ${y + 17 + dy}
-      L ${left + 2 + dx} ${y + 17 + dy}
-      L ${left + 2 + dx} ${y - 17 + dy}
-      L ${left + dx} ${y - 17 + dy}
-      Z
-      "
-      fill="#94a3b8"
-      stroke="#475569"
-      stroke-width="2"
-    />
-
-
-    <!-- TOP FLANGE -->
-
-    <rect
-      x="${left}"
-      y="${y - 27}"
-      width="${right - left}"
-      height="10"
-      fill="url(#topGradient)"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <!-- WEB -->
-
-    <rect
-      x="${left}"
-      y="${y - 17}"
-      width="${right - left}"
-      height="34"
-      fill="url(#frontGradient)"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <!-- BOTTOM FLANGE -->
-
-    <rect
-      x="${left}"
-      y="${y + 17}"
-      width="${right - left}"
-      height="10"
-      fill="#aeb9c8"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <!-- DEPTH CONNECTIONS -->
-
-    <line
-      x1="${right}"
-      y1="${y - 27}"
-      x2="${right + dx}"
-      y2="${y - 27 + dy}"
-      stroke="#475569"
-      stroke-width="2"
-    />
-
-
-    <line
-      x1="${right}"
-      y1="${y + 27}"
-      x2="${right + dx}"
-      y2="${y + 27 + dy}"
-      stroke="#475569"
-      stroke-width="2"
-    />
-
-
-    <!-- I PROFILE END -->
-
-    <line
-      x1="${right + dx - 8}"
-      y1="${y - 27 + dy}"
-      x2="${right + dx + 8}"
-      y2="${y - 27 + dy}"
-      stroke="#334155"
-      stroke-width="7"
-    />
-
-
-    <line
-      x1="${right + dx}"
-      y1="${y - 24 + dy}"
-      x2="${right + dx}"
-      y2="${y + 24 + dy}"
-      stroke="#334155"
-      stroke-width="5"
-    />
-
-
-    <line
-      x1="${right + dx - 8}"
-      y1="${y + 27 + dy}"
-      x2="${right + dx + 8}"
-      y2="${y + 27 + dy}"
-      stroke="#334155"
-      stroke-width="7"
-    />
-
-  `;
-
-}
-
-
-
-/* =========================================================
-   SELECT 2.5D BEAM
-========================================================= */
-
-
-function drawBeamBody(
-  type,
-  left,
-  right,
-  y
-) {
-
-
-  if (
-    type === "rect"
-  ) {
-
-
-    return drawRectangularBeam(
-      left,
-      right,
-      y
-    );
-
-  }
-
-
-  if (
-    type === "circle"
-  ) {
-
-
-    return drawCircularBeam(
-      left,
-      right,
-      y
-    );
-
-  }
-
-
-  if (
-    type === "hollow"
-  ) {
-
-
-    return drawHollowBeam(
-      left,
-      right,
-      y
-    );
-
-  }
-
-
-  return drawIBeam(
-    left,
-    right,
-    y
-  );
-
-}
-
-
-
-/* =========================================================
-   SUPPORTS
-========================================================= */
-
-
-function drawSupports(
-  beamType,
-  left,
-  right,
-  y
-) {
-
-
-  if (
-    beamType === "simply"
-  ) {
-
-
-    return `
-
-      <!-- LEFT PIN SUPPORT -->
-
-      <polygon
-        points="
-        ${left - 21},${y + 57}
-        ${left + 21},${y + 57}
-        ${left},${y + 27}
-        "
-        fill="#ffffff"
-        stroke="#111827"
-        stroke-width="3"
-      />
-
-
-      <polygon
-        points="
-        ${left - 21},${y + 57}
-        ${left + 21},${y + 57}
-        ${left + 30},${y + 49}
-        ${left - 12},${y + 49}
-        "
-        fill="#e2e8f0"
-        opacity="0.7"
-      />
-
-
-      <line
-        x1="${left - 30}"
-        y1="${y + 62}"
-        x2="${left + 30}"
-        y2="${y + 62}"
-        stroke="#111827"
-        stroke-width="3"
-      />
-
-
-      <!-- RIGHT ROLLER SUPPORT -->
-
-      <polygon
-        points="
-        ${right - 21},${y + 57}
-        ${right + 21},${y + 57}
-        ${right},${y + 27}
-        "
-        fill="#ffffff"
-        stroke="#111827"
-        stroke-width="3"
-      />
-
-
-      <circle
-        cx="${right - 11}"
-        cy="${y + 65}"
-        r="5"
-        fill="#ffffff"
-        stroke="#111827"
-        stroke-width="2"
-      />
-
-
-      <circle
-        cx="${right + 11}"
-        cy="${y + 65}"
-        r="5"
-        fill="#ffffff"
-        stroke="#111827"
-        stroke-width="2"
-      />
-
-
-      <line
-        x1="${right - 31}"
-        y1="${y + 73}"
-        x2="${right + 31}"
-        y2="${y + 73}"
-        stroke="#111827"
-        stroke-width="3"
-      />
-
-    `;
-
-  }
-
-
-
-  let hatch =
-    "";
-
-
-  for (
-    let yy = y - 58;
-    yy <= y + 66;
-    yy += 15
-  ) {
-
-
-    hatch += `
-
-      <line
-        x1="${left - 40}"
-        y1="${yy}"
-        x2="${left - 13}"
-        y2="${yy - 16}"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-    `;
-
-  }
-
-
-  return `
-
-    <!-- 2.5D WALL -->
-
-    <polygon
-      points="
-      ${left - 45},${y - 67}
-      ${left},${y - 55}
-      ${left},${y + 70}
-      ${left - 45},${y + 58}
-      "
-      fill="#cbd5e1"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <polygon
-      points="
-      ${left - 45},${y - 67}
-      ${left - 25},${y - 81}
-      ${left + 18},${y - 68}
-      ${left},${y - 55}
-      "
-      fill="#e2e8f0"
-      stroke="#64748b"
-      stroke-width="2"
-    />
-
-
-    <line
-      x1="${left}"
-      y1="${y - 58}"
-      x2="${left}"
-      y2="${y + 73}"
-      stroke="#111827"
-      stroke-width="8"
-    />
-
-
-    ${hatch}
-
-  `;
-
-}
-
-
-
-/* =========================================================
-   VISUALIZATION
-========================================================= */
-
-
-function drawBeam(
-  beamType,
-  P,
-  L,
-  a,
-  E,
-  I,
-  maxDeflection,
-  maxX
-) {
-
-
-  const left =
-    145;
-
-
-  const right =
-    930;
-
-
-  const beamY =
-    155;
-
-
-  const plotWidth =
-    right - left;
-
-
-
-  const toSvgX =
-    x =>
-
-      left
-
-      +
-
+    (
       (
-        x /
-        L
+        event.clientX
+        -
+        rect.left
       )
 
-      *
+      /
 
-      plotWidth;
+      rect.width
+    )
 
+    *
 
+    2
 
-  const section =
-    sectionType.value;
+    -
 
-
-
-  const sectionText =
-
-    document.getElementById(
-      "sectionType"
-    ).options[
-
-      document.getElementById(
-        "sectionType"
-      ).selectedIndex
-
-    ].text;
+    1;
 
 
+  pointer.y =
 
-  const beamName =
+    -(
 
-    beamType === "simply"
+      (
+        event.clientY
+        -
+        rect.top
+      )
 
-      ?
+      /
 
-      "Simply Supported Beam"
+      rect.height
 
-      :
+    )
 
-      "Cantilever Beam";
+    *
 
+    2
 
+    +
 
-  const beamBody =
-    drawBeamBody(
-      section,
-      left,
-      right,
-      beamY
-    );
+    1;
 
-
-
-  const supports =
-    drawSupports(
-      beamType,
-      left,
-      right,
-      beamY
-    );
+}
 
 
+function pointerHitsLoad(
+  event
+) {
 
-  /* DEFLECTION CURVE */
-
-
-  let path =
-    "";
-
-
-  const samples =
-    200;
-
-
-  const deflectionAmplitude =
-    90;
-
-
-
-  for (
-    let i = 0;
-    i <= samples;
-    i++
+  if (
+    !loadHitbox
   ) {
 
+    return false;
 
-    const x =
-      L *
-      i
-      /
-      samples;
+  }
 
 
-    const realY =
-      Math.abs(
-
-        deflectionAtX(
-          beamType,
-          x,
-          P,
-          L,
-          a,
-          E,
-          I
-        )
-
-      );
+  updatePointerFromEvent(
+    event
+  );
 
 
-    const ratio =
+  raycaster.setFromCamera(
+    pointer,
+    camera
+  );
 
-      maxDeflection > 0
+
+  return (
+
+    raycaster
+      .intersectObject(
+        loadHitbox,
+        false
+      )
+      .length
+
+    >
+
+    0
+
+  );
+
+}
+
+
+/* Hover */
+
+renderer.domElement.addEventListener(
+
+  'pointermove',
+
+  event => {
+
+    if (
+      draggingLoad
+    ) {
+
+      return;
+
+    }
+
+
+    renderer.domElement.style.cursor =
+
+      pointerHitsLoad(
+        event
+      )
 
         ?
 
-        realY /
-        maxDeflection
+        'grab'
 
         :
 
-        0;
-
-
-    const sx =
-      toSvgX(
-        x
-      );
-
-
-    const sy =
-
-      beamY
-
-      +
-
-      43
-
-      +
-
-      ratio *
-      deflectionAmplitude;
-
-
-    path +=
-
-      (
-        i === 0
-          ?
-          "M "
-          :
-          " L "
-      )
-
-      +
-
-      sx.toFixed(
-        2
-      )
-
-      +
-
-      " "
-
-      +
-
-      sy.toFixed(
-        2
-      );
+        'default';
 
   }
 
+);
 
 
-  const loadX =
-    toSvgX(
-      a
-    );
+/* Start drag */
 
+renderer.domElement.addEventListener(
 
-  const maxPointX =
-    toSvgX(
-      maxX
-    );
+  'pointerdown',
 
-
-  const maxPointY =
-    beamY
-    +
-    43
-    +
-    deflectionAmplitude;
-
-
-
-  beamSvg.innerHTML = `
-
-
-    <defs>
-
-      <linearGradient
-        id="frontGradient"
-        x1="0"
-        y1="0"
-        x2="0"
-        y2="1">
-
-        <stop
-          offset="0%"
-          stop-color="#dbe3ed"
-        />
-
-        <stop
-          offset="100%"
-          stop-color="#9eacbd"
-        />
-
-      </linearGradient>
-
-
-      <linearGradient
-        id="topGradient"
-        x1="0"
-        y1="0"
-        x2="0"
-        y2="1">
-
-        <stop
-          offset="0%"
-          stop-color="#f1f5f9"
-        />
-
-        <stop
-          offset="100%"
-          stop-color="#cbd5e1"
-        />
-
-      </linearGradient>
-
-
-      <linearGradient
-        id="cylinderGradient"
-        x1="0"
-        y1="0"
-        x2="0"
-        y2="1">
-
-        <stop
-          offset="0%"
-          stop-color="#7f8b9b"
-        />
-
-        <stop
-          offset="25%"
-          stop-color="#e2e8f0"
-        />
-
-        <stop
-          offset="50%"
-          stop-color="#cbd5e1"
-        />
-
-        <stop
-          offset="80%"
-          stop-color="#94a3b8"
-        />
-
-        <stop
-          offset="100%"
-          stop-color="#64748b"
-        />
-
-      </linearGradient>
-
-    </defs>
-
-
-
-    <!-- TITLE AREA -->
-
-
-    <text
-      x="550"
-      y="29"
-      text-anchor="middle"
-      font-size="20"
-      font-weight="700"
-      fill="#111827">
-
-      ${beamName}
-
-    </text>
-
-
-    <text
-      x="550"
-      y="52"
-      text-anchor="middle"
-      font-size="13"
-      fill="#64748b">
-
-      Cross Section:
-      ${sectionText}
-
-    </text>
-
-
-
-    <!-- SUPPORTS -->
-
-
-    ${supports}
-
-
-
-    <!-- 2.5D UNDEFORMED BEAM -->
-
-
-    ${beamBody}
-
-
-
-    <!-- DRAGGABLE POINT LOAD -->
-
-
-    <g
-      data-load-handle="true"
-      style="cursor: grab;">
-
-
-      <!-- LARGE INVISIBLE HIT AREA -->
-
-      <rect
-        data-load-handle="true"
-        x="${loadX - 42}"
-        y="65"
-        width="84"
-        height="110"
-        fill="transparent"
-        pointer-events="all"
-      />
-
-
-      <!-- LOAD VALUE -->
-
-      <text
-        data-load-handle="true"
-        x="${loadX}"
-        y="83"
-        text-anchor="middle"
-        font-size="14"
-        font-weight="700"
-        fill="#b91c1c">
-
-        P = ${formatNumber(P, 2)} N
-
-      </text>
-
-
-      <!-- HAND GRIP -->
-
-      <circle
-        data-load-handle="true"
-        cx="${loadX}"
-        cy="102"
-        r="10"
-        fill="#ef4444"
-        stroke="#ffffff"
-        stroke-width="3"
-      />
-
-
-      <!-- LOAD LINE -->
-
-      <line
-        data-load-handle="true"
-        x1="${loadX}"
-        y1="112"
-        x2="${loadX}"
-        y2="${beamY - 18}"
-        stroke="#dc2626"
-        stroke-width="5"
-      />
-
-
-      <!-- ARROW TIP -->
-
-      <polygon
-        data-load-handle="true"
-        points="
-        ${loadX - 13},${beamY - 18}
-        ${loadX + 13},${beamY - 18}
-        ${loadX},${beamY + 8}
-        "
-        fill="#dc2626"
-        stroke="#b91c1c"
-        stroke-width="1.5"
-      />
-
-    </g>
-
-
-
-    <!-- LOAD POSITION -->
-
-
-    <line
-      x1="${left}"
-      y1="${beamY - 65}"
-      x2="${loadX}"
-      y2="${beamY - 65}"
-      stroke="#f59e0b"
-      stroke-width="1.7"
-    />
-
-
-    <line
-      x1="${left}"
-      y1="${beamY - 70}"
-      x2="${left}"
-      y2="${beamY - 60}"
-      stroke="#f59e0b"
-      stroke-width="1.7"
-    />
-
-
-    <line
-      x1="${loadX}"
-      y1="${beamY - 70}"
-      x2="${loadX}"
-      y2="${beamY - 60}"
-      stroke="#f59e0b"
-      stroke-width="1.7"
-    />
-
-
-    <text
-      x="${(left + loadX) / 2}"
-      y="${beamY - 73}"
-      text-anchor="middle"
-      font-size="12"
-      font-weight="700"
-      fill="#d97706">
-
-      a =
-      ${formatNumber(a, 2)}
-      mm
-
-    </text>
-
-
-
-    <!-- DEFLECTION CURVE -->
-
-
-    <path
-      d="${path}"
-      fill="none"
-      stroke="#2563eb"
-      stroke-width="4"
-      stroke-linecap="round"
-    />
-
-
-
-    <!-- MAX DEFLECTION POINT -->
-
-
-    <circle
-      cx="${maxPointX}"
-      cy="${maxPointY}"
-      r="7"
-      fill="#111827"
-      stroke="#ffffff"
-      stroke-width="2"
-    />
-
-
-    <text
-      x="${maxPointX}"
-      y="${maxPointY + 24}"
-      text-anchor="middle"
-      font-size="12"
-      font-weight="700"
-      fill="#111827">
-
-      Maximum Deflection
-
-    </text>
-
-
-    <text
-      x="${maxPointX}"
-      y="${maxPointY + 41}"
-      text-anchor="middle"
-      font-size="12"
-      fill="#475569">
-
-      x =
-      ${formatNumber(maxX, 2)}
-      mm
-
-    </text>
-
-
-
-    <!-- LENGTH DIMENSION -->
-
-
-    <line
-      x1="${left}"
-      y1="386"
-      x2="${right}"
-      y2="386"
-      stroke="#94a3b8"
-      stroke-width="1.5"
-    />
-
-
-    <line
-      x1="${left}"
-      y1="379"
-      x2="${left}"
-      y2="393"
-      stroke="#94a3b8"
-      stroke-width="1.5"
-    />
-
-
-    <line
-      x1="${right}"
-      y1="379"
-      x2="${right}"
-      y2="393"
-      stroke="#94a3b8"
-      stroke-width="1.5"
-    />
-
-
-    <text
-      x="${left}"
-      y="412"
-      text-anchor="middle"
-      font-size="12"
-      fill="#64748b">
-
-      0
-
-    </text>
-
-
-    <text
-      x="${right}"
-      y="412"
-      text-anchor="middle"
-      font-size="12"
-      fill="#64748b">
-
-      L =
-      ${formatNumber(L, 2)}
-      mm
-
-    </text>
-
-  `;
-
-}
-
-
-
-/* =========================================================
-   LOAD DRAG
-========================================================= */
-
-
-beamSvg.addEventListener(
-  "pointerdown",
-  function(event) {
-
-
-    const handle =
-      event.target.closest(
-        "[data-load-handle='true']"
-      );
-
+  event => {
 
     if (
-      !handle
+      !pointerHitsLoad(
+        event
+      )
     ) {
 
       return;
@@ -3144,39 +3810,49 @@ beamSvg.addEventListener(
       true;
 
 
+    dragPointerId =
+      event.pointerId;
+
+
     document.body.classList.add(
-      "dragging"
+      'dragging'
     );
 
 
-    const group =
-      handle.closest(
-        "g[data-load-handle='true']"
+    renderer.domElement.style.cursor =
+      'grabbing';
+
+
+    controls.enabled =
+      false;
+
+
+    renderer
+      .domElement
+      .setPointerCapture?.(
+        event.pointerId
       );
-
-
-    if (group) {
-
-      group.style.cursor =
-        "grabbing";
-
-    }
 
 
     event.preventDefault();
 
   }
+
 );
 
 
+/* Drag */
 
-window.addEventListener(
-  "pointermove",
-  function(event) {
+renderer.domElement.addEventListener(
 
+  'pointermove',
+
+  event => {
 
     if (
       !draggingLoad
+      ||
+      !lastValidState
     ) {
 
       return;
@@ -3184,20 +3860,28 @@ window.addEventListener(
     }
 
 
-    const L =
-      Number(
+    updatePointerFromEvent(
+      event
+    );
 
-        document.getElementById(
-          "length"
-        ).value
 
-      );
+    raycaster.setFromCamera(
+      pointer,
+      camera
+    );
+
+
+    const worldPoint =
+      new THREE.Vector3();
 
 
     if (
-      !Number.isFinite(L)
-      ||
-      L <= 0
+      !raycaster
+        .ray
+        .intersectPlane(
+          dragPlane,
+          worldPoint
+        )
     ) {
 
       return;
@@ -3205,96 +3889,68 @@ window.addEventListener(
     }
 
 
-    const rect =
-      beamSvg.getBoundingClientRect();
-
-
-    const viewBoxX =
-
-      (
-        event.clientX
-        -
-        rect.left
-      )
-
-      /
-      rect.width
-
-      *
-
-      1100;
-
-
-    const left =
-      145;
-
-
-    const right =
-      930;
+    const localPoint =
+      structureGroup.worldToLocal(
+        worldPoint.clone()
+      );
 
 
     let ratio =
 
       (
-        viewBoxX
-        -
-        left
+        localPoint.x
+
+        +
+
+        HALF_BEAM
       )
 
       /
 
-      (
-        right
-        -
-        left
-      );
+      BEAM_SCENE_LENGTH;
 
 
     ratio =
-      Math.max(
+      THREE.MathUtils.clamp(
+        ratio,
         0,
-        Math.min(
-          1,
-          ratio
-        )
+        1
       );
 
 
     let a =
       ratio *
-      L;
+      lastValidState.L;
 
 
-    const beamType =
-      document.getElementById(
-        "beamType"
-      ).value;
-
-
-    const minimumPosition =
+    const minA =
       Math.max(
-        L *
+
+        lastValidState.L
+        *
         0.002,
+
         0.001
+
       );
 
 
     if (
-      beamType === "simply"
+      lastValidState.beamType
+      ===
+      'simply'
     ) {
 
-
       a =
-        Math.max(
+        THREE.MathUtils.clamp(
 
-          minimumPosition,
+          a,
 
-          Math.min(
-            L
-            -
-            minimumPosition,
-            a
-          )
+          minA,
+
+          lastValidState.L
+          -
+          minA
 
         );
 
@@ -3303,42 +3959,51 @@ window.addEventListener(
 
     else {
 
-
       a =
-        Math.max(
+        THREE.MathUtils.clamp(
 
-          minimumPosition,
+          a,
 
-          Math.min(
-            L,
-            a
-          )
+          minA,
+
+          lastValidState.L
 
         );
 
     }
 
 
-    document.getElementById(
-      "position"
-    ).value =
-
+    positionEl.value =
       a.toFixed(
         1
       );
 
 
-    calculateBeam();
+    calculateBeam(
+      false
+    );
 
 
     event.preventDefault();
 
   }
+
 );
 
 
+/* End drag */
 
-function stopDragging() {
+function stopLoadDrag(
+  event
+) {
+
+  if (
+    !draggingLoad
+  ) {
+
+    return;
+
+  }
 
 
   draggingLoad =
@@ -3346,87 +4011,257 @@ function stopDragging() {
 
 
   document.body.classList.remove(
-    "dragging"
+    'dragging'
   );
+
+
+  renderer.domElement.style.cursor =
+    'default';
+
+
+  controls.enabled =
+    true;
+
+
+  if (
+    dragPointerId !== null
+  ) {
+
+    try {
+
+      renderer
+        .domElement
+        .releasePointerCapture?.(
+          dragPointerId
+        );
+
+    }
+
+    catch (_) {}
+
+  }
+
+
+  dragPointerId =
+    null;
+
+
+  if (
+    event
+  ) {
+
+    event.preventDefault();
+
+  }
 
 }
 
 
-
-window.addEventListener(
-  "pointerup",
-  stopDragging
+renderer.domElement.addEventListener(
+  'pointerup',
+  stopLoadDrag
 );
 
 
-
-window.addEventListener(
-  "pointercancel",
-  stopDragging
+renderer.domElement.addEventListener(
+  'pointercancel',
+  stopLoadDrag
 );
 
+
+window.addEventListener(
+  'pointerup',
+  stopLoadDrag
+);
 
 
 /* =========================================================
    EVENTS
 ========================================================= */
 
+sectionTypeEl.addEventListener(
 
-sectionType.addEventListener(
-  "change",
-  function() {
+  'change',
 
+  () => {
 
     renderSectionFields();
 
-
-    calculateBeam();
+    calculateBeam(
+      true
+    );
 
   }
+
 );
 
+
+beamTypeEl.addEventListener(
+
+  'change',
+
+  () =>
+    calculateBeam(
+      true
+    )
+
+);
+
+
+materialEl.addEventListener(
+
+  'change',
+
+  () =>
+    calculateBeam(
+      true
+    )
+
+);
 
 
 document.getElementById(
-  "beamType"
+  'calculateBtn'
 ).addEventListener(
-  "change",
-  calculateBeam
+
+  'click',
+
+  () =>
+    calculateBeam(
+      true
+    )
+
 );
 
 
+/* Input → 3D real-time link */
 
-document.getElementById(
-  "material"
-).addEventListener(
-  "change",
-  calculateBeam
+positionEl.addEventListener(
+
+  'input',
+
+  () =>
+    calculateBeam(
+      false
+    )
+
 );
 
 
+lengthEl.addEventListener(
 
-document.getElementById(
-  "calculateBtn"
-).addEventListener(
-  "click",
-  calculateBeam
+  'change',
+
+  () =>
+    calculateBeam(
+      true
+    )
+
 );
 
+
+loadEl.addEventListener(
+
+  'change',
+
+  () =>
+    calculateBeam(
+      true
+    )
+
+);
+
+
+sectionFields.addEventListener(
+
+  'change',
+
+  () =>
+    calculateBeam(
+      true
+    )
+
+);
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+function resizeRenderer() {
+
+  const width =
+    viewer.clientWidth;
+
+
+  const height =
+    viewer.clientHeight;
+
+
+  renderer.setSize(
+    width,
+    height,
+    false
+  );
+
+
+  camera.aspect =
+    width /
+    height;
+
+
+  camera.updateProjectionMatrix();
+
+}
+
+
+new ResizeObserver(
+  resizeRenderer
+).observe(
+  viewer
+);
+
+
+resizeRenderer();
+
+
+/* =========================================================
+   RENDER LOOP
+========================================================= */
+
+function animate() {
+
+  requestAnimationFrame(
+    animate
+  );
+
+
+  controls.update();
+
+
+  renderer.render(
+    scene,
+    camera
+  );
+
+}
+
+
+animate();
 
 
 /* =========================================================
    INITIALIZE
 ========================================================= */
 
-
 renderSectionFields();
 
 
-calculateBeam();
-
+calculateBeam(
+  true
+);
 
 </script>
 
 </body>
-
 </html>
