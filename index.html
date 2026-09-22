@@ -36,11 +36,11 @@
     }
 
     .card {
-      background: #ffffff;
+      background: #fff;
       border-radius: 14px;
       padding: 26px;
       margin-bottom: 22px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 24px rgba(0,0,0,.08);
     }
 
     h1 {
@@ -61,7 +61,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2,minmax(0,1fr));
       gap: 18px;
     }
 
@@ -83,7 +83,7 @@
       border: 1px solid #d1d5db;
       border-radius: 8px;
       font-size: 15px;
-      background: #ffffff;
+      background: #fff;
     }
 
     input:focus,
@@ -107,18 +107,18 @@
     .calc-button {
       width: 100%;
       margin-top: 24px;
-      border: none;
+      border: 0;
       padding: 14px 18px;
       border-radius: 9px;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
       background: #111827;
-      color: #ffffff;
+      color: #fff;
     }
 
     .calc-button:hover {
-      opacity: 0.93;
+      opacity: .93;
     }
 
     .error {
@@ -136,8 +136,8 @@
     .viewer-head {
       display: grid;
       grid-template-columns:
-        minmax(220px, 1fr)
-        minmax(260px, 1fr)
+        minmax(220px,1fr)
+        minmax(260px,1fr)
         220px
         auto;
       gap: 12px;
@@ -165,7 +165,7 @@
 
     .zoom-controls {
       display: grid;
-      grid-template-columns: 36px minmax(92px, 1fr) 36px;
+      grid-template-columns: 36px minmax(92px,1fr) 36px;
       gap: 6px;
       align-items: center;
     }
@@ -174,7 +174,7 @@
       height: 36px;
       border: 1px solid #d1d5db;
       border-radius: 7px;
-      background: #ffffff;
+      background: #fff;
       color: #111827;
       font-size: 18px;
       font-weight: 700;
@@ -190,7 +190,7 @@
       padding: 0 8px;
       border: 1px solid #d1d5db;
       border-radius: 7px;
-      background: #ffffff;
+      background: #fff;
       color: #111827;
       font-size: 13px;
       font-weight: 700;
@@ -203,7 +203,7 @@
       padding: 0 16px;
       border: 1px solid #d1d5db;
       border-radius: 9px;
-      background: #ffffff;
+      background: #fff;
       color: #111827;
       font-weight: 700;
       cursor: pointer;
@@ -254,7 +254,7 @@
 
     .results {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3,minmax(0,1fr));
       gap: 14px;
     }
 
@@ -305,7 +305,6 @@
 
 <div class="container">
 
-  <!-- INPUT -->
   <div class="card">
 
     <h1>
@@ -413,13 +412,11 @@
       <div class="field">
 
         <label for="position">
-
           Load Position, a (mm)
 
           <span class="small">
             - from left support / fixed end
           </span>
-
         </label>
 
         <input
@@ -473,9 +470,7 @@
       type="button"
       id="calculateBtn"
       class="calc-button">
-
       CALCULATE
-
     </button>
 
 
@@ -487,7 +482,7 @@
   </div>
 
 
-  <!-- 3D VIEW -->
+
   <div class="card">
 
     <h2>
@@ -535,16 +530,14 @@
           <button
             type="button"
             id="zoomOutBtn"
-            class="zoom-button"
-            aria-label="Zoom out">
+            class="zoom-button">
             −
           </button>
 
 
           <select
             id="zoomSelect"
-            class="zoom-select"
-            aria-label="Zoom percentage">
+            class="zoom-select">
 
             <option value="25">25%</option>
             <option value="50">50%</option>
@@ -554,9 +547,13 @@
             <option value="150">150%</option>
             <option value="175">175%</option>
             <option value="200">200%</option>
+            <option value="225">225%</option>
             <option value="250">250%</option>
+            <option value="275">275%</option>
             <option value="300">300%</option>
+            <option value="325">325%</option>
             <option value="350">350%</option>
+            <option value="375">375%</option>
             <option value="400">400%</option>
 
           </select>
@@ -565,8 +562,7 @@
           <button
             type="button"
             id="zoomInBtn"
-            class="zoom-button"
-            aria-label="Zoom in">
+            class="zoom-button">
             +
           </button>
 
@@ -579,9 +575,7 @@
         type="button"
         id="resetViewBtn"
         class="reset-button">
-
         RESET VIEW
-
       </button>
 
     </div>
@@ -591,161 +585,115 @@
 
 
     <div class="viewer-hint">
-
-      Mouse wheel = Zoom In / Out ·
+      Mouse wheel = Zoom ±25% ·
       Left drag on empty space = Rotate ·
-      Middle-wheel button drag = Pan left / right / up / down ·
+      Middle-wheel drag = Pan ·
       Left drag on the red 3D point-load arrow = Move Point Load.
-
-      The Zoom percentage is synchronized with wheel zoom.
-
-      Selecting 100% changes only the zoom level while preserving
-      the current angle and Pan position.
-
-      RESET VIEW restores the initial angle,
-      Pan position, and 100% zoom.
-
+      RESET VIEW restores the initial view and 100% zoom.
     </div>
 
 
     <div class="legend">
-
-      Beam / support:
-      3D object
-
+      Beam / support: 3D object
       &nbsp; | &nbsp;
-
-      Blue line:
-      exaggerated deflected centerline
-
+      Blue line: exaggerated deflected centerline
       &nbsp; | &nbsp;
-
-      Red arrow:
-      draggable 3D point load
-
+      Red arrow: draggable 3D point load
       &nbsp; | &nbsp;
-
-      Black sphere:
-      maximum deflection position
-
+      Black sphere: maximum deflection position
     </div>
 
   </div>
 
 
-  <!-- RESULTS -->
+
   <div class="card">
 
     <h2>
       Calculation Results
     </h2>
 
-
     <div class="results">
 
-
       <div class="result-box">
-
         <div class="result-label">
           Maximum Moment
         </div>
-
         <div
           class="result-value"
           id="momentResult">
           -
         </div>
-
       </div>
 
 
       <div class="result-box">
-
         <div class="result-label">
           Maximum Deflection
         </div>
-
         <div
           class="result-value"
           id="deflectionResult">
           -
         </div>
-
       </div>
 
 
       <div class="result-box">
-
         <div class="result-label">
           Maximum Deflection Position
         </div>
-
         <div
           class="result-value"
           id="positionResult">
           -
         </div>
-
       </div>
 
 
       <div class="result-box">
-
         <div class="result-label">
           Maximum Stress
         </div>
-
         <div
           class="result-value"
           id="stressResult">
           -
         </div>
-
       </div>
 
 
       <div class="result-box">
-
         <div class="result-label">
           Maximum Strain
         </div>
-
         <div
           class="result-value"
           id="strainResult">
           -
         </div>
-
       </div>
 
 
       <div class="result-box">
-
         <div class="result-label">
           Second Moment of Area, I
         </div>
-
         <div
           class="result-value"
           id="inertiaResult">
           -
         </div>
-
       </div>
 
     </div>
 
 
     <p class="note">
-
-      Internal units:
-      N, mm, MPa.
-
+      Internal units: N, mm, MPa.
       Linear elastic Euler-Bernoulli beam behavior is assumed.
-
       The 3D geometry and deformation are schematic
       and are not drawn to exact physical scale.
-
     </p>
 
   </div>
@@ -856,42 +804,24 @@ const HALF_BEAM =
 const DEFLECTION_VISUAL_AMPLITUDE =
   0.95;
 
-
-const ZOOM_PRESETS = [
-
-  25,
-
-  50,
-
-  75,
-
-  100,
-
-  125,
-
-  150,
-
-  175,
-
-  200,
-
-  250,
-
-  300,
-
-  350,
-
-  400
-
-];
-
+const ZOOM_STEP =
+  25;
 
 const MIN_ZOOM_PERCENT =
   25;
 
-
 const MAX_ZOOM_PERCENT =
   400;
+
+
+let currentZoomPercent =
+  100;
+
+let wheelAccumulator =
+  0;
+
+let lastWheelTime =
+  0;
 
 
 /* =========================================================
@@ -946,7 +876,7 @@ viewer.appendChild(
 
 
 /* =========================================================
-   ROTATE / PAN / ZOOM
+   VIEW CONTROLS
 ========================================================= */
 
 const controls =
@@ -972,8 +902,12 @@ controls.enablePan =
   true;
 
 
+/*
+  OrbitControls 기본 Zoom은 끄고
+  아래에서 직접 25% 단위 Zoom을 제어
+*/
 controls.enableZoom =
-  true;
+  false;
 
 
 controls.screenSpacePanning =
@@ -988,15 +922,6 @@ controls.panSpeed =
   0.9;
 
 
-controls.zoomSpeed =
-  1.0;
-
-
-/*
-  거의 자유롭게 위/아래 방향을 회전할 수 있도록
-  기존보다 제한 범위를 크게 완화
-*/
-
 controls.minPolarAngle =
   THREE.MathUtils.degToRad(
     5
@@ -1008,12 +933,6 @@ controls.maxPolarAngle =
     175
   );
 
-
-/*
-  LEFT = Rotate
-  MIDDLE = Pan
-  RIGHT = Rotate
-*/
 
 controls.mouseButtons.LEFT =
   THREE.MOUSE.ROTATE;
@@ -1029,13 +948,16 @@ controls.mouseButtons.RIGHT =
 
 /* =========================================================
    DEFAULT VIEW
+
+   x = 0으로 두어 초기 화면에서
+   Beam의 길이축이 화면상 수평으로 보이도록 함
 ========================================================= */
 
 const DEFAULT_CAMERA_POSITION =
   new THREE.Vector3(
-    8.2,
+    0,
     5.3,
-    9.0
+    10.5
   );
 
 
@@ -1053,28 +975,130 @@ const DEFAULT_CAMERA_DISTANCE =
   );
 
 
-/*
-  25% ~ 400%
-*/
-
 controls.minDistance =
   DEFAULT_CAMERA_DISTANCE
   *
-  (
-    100
-    /
-    MAX_ZOOM_PERCENT
-  );
+  100
+  /
+  MAX_ZOOM_PERCENT;
 
 
 controls.maxDistance =
   DEFAULT_CAMERA_DISTANCE
   *
-  (
+  100
+  /
+  MIN_ZOOM_PERCENT;
+
+
+/* =========================================================
+   ZOOM
+========================================================= */
+
+function updateZoomUI() {
+
+  zoomSelectEl.value =
+    String(
+      currentZoomPercent
+    );
+
+}
+
+
+function setZoomPercent(
+  percent
+) {
+
+  const snapped =
+
+    Math.round(
+      Number(percent)
+      /
+      ZOOM_STEP
+    )
+
+    *
+
+    ZOOM_STEP;
+
+
+  const zoom =
+    THREE.MathUtils.clamp(
+      snapped,
+      MIN_ZOOM_PERCENT,
+      MAX_ZOOM_PERCENT
+    );
+
+
+  /*
+    현재 회전각도와 Pan 위치는 그대로 유지하고
+    camera-target 거리만 변경
+  */
+
+  const direction =
+    camera.position
+      .clone()
+      .sub(
+        controls.target
+      );
+
+
+  if (
+    direction.lengthSq()
+    <
+    1e-12
+  ) {
+
+    direction.set(
+      0,
+      0.5,
+      1
+    );
+
+  }
+
+
+  direction.normalize();
+
+
+  const distance =
+
+    DEFAULT_CAMERA_DISTANCE
+
+    *
+
     100
+
     /
-    MIN_ZOOM_PERCENT
+
+    zoom;
+
+
+  camera.position.copy(
+
+    controls.target
+      .clone()
+      .add(
+
+        direction.multiplyScalar(
+          distance
+        )
+
+      )
+
   );
+
+
+  currentZoomPercent =
+    zoom;
+
+
+  controls.update();
+
+
+  updateZoomUI();
+
+}
 
 
 function resetView() {
@@ -1096,278 +1120,14 @@ function resetView() {
   );
 
 
-  controls.update();
-
-
-  updateZoomUI();
-
-}
-
-
-/* =========================================================
-   ZOOM %
-========================================================= */
-
-function getZoomPercent() {
-
-  const distance =
-    camera.position.distanceTo(
-      controls.target
-    );
-
-
-  if (
-    !Number.isFinite(
-      distance
-    )
-    ||
-    distance <= 0
-  ) {
-
-    return 100;
-
-  }
-
-
-  return THREE.MathUtils.clamp(
-
-    (
-      DEFAULT_CAMERA_DISTANCE
-      /
-      distance
-    )
-    *
-    100,
-
-    MIN_ZOOM_PERCENT,
-
-    MAX_ZOOM_PERCENT
-
-  );
-
-}
-
-
-function removeTemporaryZoomOption() {
-
-  const temporary =
-    zoomSelectEl.querySelector(
-      'option[data-current-zoom="true"]'
-    );
-
-
-  if (
-    temporary
-  ) {
-
-    temporary.remove();
-
-  }
-
-}
-
-
-function updateZoomUI() {
-
-  const zoom =
-    Math.round(
-      getZoomPercent()
-    );
-
-
-  removeTemporaryZoomOption();
-
-
-  const exactPreset =
-    ZOOM_PRESETS.includes(
-      zoom
-    );
-
-
-  if (
-    exactPreset
-  ) {
-
-    zoomSelectEl.value =
-      String(
-        zoom
-      );
-
-
-    return;
-
-  }
-
-
-  const option =
-    document.createElement(
-      "option"
-    );
-
-
-  option.value =
-    String(
-      zoom
-    );
-
-
-  option.textContent =
-    `${zoom}%`;
-
-
-  option.dataset.currentZoom =
-    "true";
-
-
-  zoomSelectEl.insertBefore(
-    option,
-    zoomSelectEl.firstChild
-  );
-
-
-  zoomSelectEl.value =
-    String(
-      zoom
-    );
-
-}
-
-
-function setZoomPercent(
-  percent
-) {
-
-  const zoom =
-    THREE.MathUtils.clamp(
-
-      Number(
-        percent
-      ),
-
-      MIN_ZOOM_PERCENT,
-
-      MAX_ZOOM_PERCENT
-
-    );
-
-
-  /*
-    현재 회전각도와 Pan 위치는 유지한 채
-    카메라와 target 사이 거리만 바꿈
-  */
-
-  const direction =
-    camera.position
-      .clone()
-      .sub(
-        controls.target
-      );
-
-
-  if (
-    direction.lengthSq()
-    <
-    1e-12
-  ) {
-
-    direction.set(
-      1,
-      0.5,
-      1
-    );
-
-  }
-
-
-  direction.normalize();
-
-
-  const targetDistance =
-
-    DEFAULT_CAMERA_DISTANCE
-
-    *
-
-    (
-      100
-      /
-      zoom
-    );
-
-
-  camera.position.copy(
-
-    controls.target
-      .clone()
-      .add(
-
-        direction.multiplyScalar(
-          targetDistance
-        )
-
-      )
-
-  );
+  currentZoomPercent =
+    100;
 
 
   controls.update();
 
 
   updateZoomUI();
-
-}
-
-
-function getNextZoomPreset(
-  direction
-) {
-
-  const current =
-    getZoomPercent();
-
-
-  if (
-    direction > 0
-  ) {
-
-    return (
-
-      ZOOM_PRESETS.find(
-
-        value =>
-          value >
-          current + 0.5
-
-      )
-
-      ??
-
-      MAX_ZOOM_PERCENT
-
-    );
-
-  }
-
-
-  return (
-
-    [
-      ...ZOOM_PRESETS
-    ]
-      .reverse()
-      .find(
-
-        value =>
-          value <
-          current - 0.5
-
-      )
-
-    ??
-
-    MIN_ZOOM_PERCENT
-
-  );
 
 }
 
@@ -1391,9 +1151,9 @@ zoomInBtn.addEventListener(
   () => {
 
     setZoomPercent(
-      getNextZoomPreset(
-        1
-      )
+      currentZoomPercent
+      +
+      ZOOM_STEP
     );
 
   }
@@ -1405,9 +1165,9 @@ zoomOutBtn.addEventListener(
   () => {
 
     setZoomPercent(
-      getNextZoomPreset(
-        -1
-      )
+      currentZoomPercent
+      -
+      ZOOM_STEP
     );
 
   }
@@ -1421,15 +1181,101 @@ resetViewBtn.addEventListener(
 
 
 /*
-  휠 Zoom,
-  Pan,
-  Rotate를 사용해도
-  % 표시 자동 갱신
+  휠도 무조건 25% 단위.
+
+  일반 마우스 휠:
+  1 notch ≈ 25%
+
+  터치패드:
+  작은 delta값들을 누적해서
+  기준값을 넘을 때 한 단계만 실행
 */
 
-controls.addEventListener(
-  "change",
-  updateZoomUI
+renderer.domElement.addEventListener(
+  "wheel",
+  event => {
+
+    event.preventDefault();
+
+
+    event.stopPropagation();
+
+
+    const now =
+      performance.now();
+
+
+    if (
+      now
+      -
+      lastWheelTime
+      >
+      160
+    ) {
+
+      wheelAccumulator =
+        0;
+
+    }
+
+
+    lastWheelTime =
+      now;
+
+
+    wheelAccumulator +=
+      event.deltaY;
+
+
+    const threshold =
+      30;
+
+
+    if (
+      Math.abs(
+        wheelAccumulator
+      )
+      <
+      threshold
+    ) {
+
+      return;
+
+    }
+
+
+    const direction =
+
+      wheelAccumulator < 0
+
+        ?
+
+        1
+
+        :
+
+        -1;
+
+
+    wheelAccumulator =
+      0;
+
+
+    setZoomPercent(
+
+      currentZoomPercent
+
+      +
+
+      direction * ZOOM_STEP
+
+    );
+
+  },
+  {
+    passive: false,
+    capture: true
+  }
 );
 
 
@@ -1509,11 +1355,8 @@ const floor =
     ),
 
     new THREE.MeshStandardMaterial({
-      color:
-        0xf1f5f9,
-
-      roughness:
-        1
+      color: 0xf1f5f9,
+      roughness: 1
     })
 
   );
@@ -1556,11 +1399,20 @@ scene.add(
 
 /* =========================================================
    STRUCTURE
-   고정 8시 → 2시 rotation 제거
+
+   Beam / Support 자체는 항상 수평.
+   사용자가 Rotate할 때 움직이는 것은 Camera.
 ========================================================= */
 
 const structureGroup =
   new THREE.Group();
+
+
+structureGroup.rotation.set(
+  0,
+  0,
+  0
+);
 
 
 scene.add(
@@ -1576,6 +1428,10 @@ const pointer =
   new THREE.Vector2();
 
 
+const loadDragPlane =
+  new THREE.Plane();
+
+
 let loadHitbox =
   null;
 
@@ -1588,12 +1444,16 @@ let activePointerId =
   null;
 
 
+let loadDragLocalXOffset =
+  0;
+
+
 let lastValidState =
   null;
 
 
 /* =========================================================
-   CROSS SECTION INPUT
+   SECTION INPUT
 ========================================================= */
 
 function renderSectionFields() {
@@ -1620,8 +1480,7 @@ function renderSectionFields() {
             id="width"
             type="text"
             inputmode="decimal"
-            value="50"
-          >
+            value="50">
 
         </div>
 
@@ -1636,8 +1495,7 @@ function renderSectionFields() {
             id="height"
             type="text"
             inputmode="decimal"
-            value="100"
-          >
+            value="100">
 
         </div>
 
@@ -1666,8 +1524,7 @@ function renderSectionFields() {
             id="diameter"
             type="text"
             inputmode="decimal"
-            value="80"
-          >
+            value="80">
 
         </div>
 
@@ -1696,8 +1553,7 @@ function renderSectionFields() {
             id="outerDiameter"
             type="text"
             inputmode="decimal"
-            value="100"
-          >
+            value="100">
 
         </div>
 
@@ -1712,8 +1568,7 @@ function renderSectionFields() {
             id="innerDiameter"
             type="text"
             inputmode="decimal"
-            value="70"
-          >
+            value="70">
 
         </div>
 
@@ -1740,8 +1595,7 @@ function renderSectionFields() {
             id="iHeight"
             type="text"
             inputmode="decimal"
-            value="120"
-          >
+            value="120">
 
         </div>
 
@@ -1756,8 +1610,7 @@ function renderSectionFields() {
             id="flangeWidth"
             type="text"
             inputmode="decimal"
-            value="80"
-          >
+            value="80">
 
         </div>
 
@@ -1772,8 +1625,7 @@ function renderSectionFields() {
             id="flangeThickness"
             type="text"
             inputmode="decimal"
-            value="10"
-          >
+            value="10">
 
         </div>
 
@@ -1788,8 +1640,7 @@ function renderSectionFields() {
             id="webThickness"
             type="text"
             inputmode="decimal"
-            value="8"
-          >
+            value="8">
 
         </div>
 
@@ -1812,16 +1663,16 @@ function getNumber(
   errors
 ) {
 
-  const element =
+  const el =
     document.getElementById(
       id
     );
 
 
   const raw =
-    element
+    el
       ?
-      element.value.trim()
+      el.value.trim()
       :
       "";
 
@@ -1873,14 +1724,10 @@ function formatNumber(
 ) {
 
   return value.toLocaleString(
-
     undefined,
-
     {
-      maximumFractionDigits:
-        digits
+      maximumFractionDigits: digits
     }
-
   );
 
 }
@@ -2024,10 +1871,8 @@ function makeDisplayDimensions(
   ) {
 
     return {
-
       d:
         raw.d * scale
-
     };
 
   }
@@ -2070,7 +1915,7 @@ function makeDisplayDimensions(
 
 
 /* =========================================================
-   CROSS SECTION PROPERTIES
+   SECTION PROPERTIES
 ========================================================= */
 
 function getSectionData(
@@ -2150,10 +1995,7 @@ function getSectionData(
       I:
         b
         *
-        Math.pow(
-          h,
-          3
-        )
+        h ** 3
         /
         12,
 
@@ -2220,10 +2062,7 @@ function getSectionData(
       I:
         Math.PI
         *
-        Math.pow(
-          d,
-          4
-        )
+        d ** 4
         /
         64,
 
@@ -2328,15 +2167,9 @@ function getSectionData(
         Math.PI
         *
         (
-          Math.pow(
-            D,
-            4
-          )
+          D ** 4
           -
-          Math.pow(
-            d,
-            4
-          )
+          d ** 4
         )
         /
         64,
@@ -2491,10 +2324,7 @@ function getSectionData(
 
     B
     *
-    Math.pow(
-      tf,
-      3
-    )
+    tf ** 3
     /
     12
 
@@ -2506,22 +2336,18 @@ function getSectionData(
 
     *
 
-    Math.pow(
+    (
       H / 2
       -
-      tf / 2,
-      2
-    );
+      tf / 2
+    ) ** 2;
 
 
   const webI =
 
     tw
     *
-    Math.pow(
-      webHeight,
-      3
-    )
+    webHeight ** 3
     /
     12;
 
@@ -2561,7 +2387,7 @@ function getSectionData(
 
 
 /* =========================================================
-   DEFLECTION EQUATIONS
+   BEAM FORMULAS
 ========================================================= */
 
 function deflectionAtX(
@@ -2718,10 +2544,6 @@ function deflectionAtX(
 }
 
 
-/* =========================================================
-   MAXIMUM DEFLECTION POSITION
-========================================================= */
-
 function maxDeflectionPosition(
   type,
   L,
@@ -2753,9 +2575,7 @@ function maxDeflectionPosition(
 
 
   if (
-    a
-    <
-    L / 2
+    a < L / 2
   ) {
 
     return (
@@ -2864,81 +2684,46 @@ function beamMaterial() {
 
 const supportMaterial =
   new THREE.MeshStandardMaterial({
-
-    color:
-      0x374151,
-
-    metalness:
-      0.22,
-
-    roughness:
-      0.55
-
+    color: 0x374151,
+    metalness: 0.22,
+    roughness: 0.55
   });
 
 
 const baseMaterial =
   new THREE.MeshStandardMaterial({
-
-    color:
-      0x94a3b8,
-
-    metalness:
-      0.08,
-
-    roughness:
-      0.82
-
+    color: 0x94a3b8,
+    metalness: 0.08,
+    roughness: 0.82
   });
 
 
 const redMaterial =
   new THREE.MeshStandardMaterial({
-
-    color:
-      0xdc2626,
-
-    metalness:
-      0.18,
-
-    roughness:
-      0.4
-
+    color: 0xdc2626,
+    metalness: 0.18,
+    roughness: 0.4
   });
 
 
 const blackMaterial =
   new THREE.MeshStandardMaterial({
-
-    color:
-      0x111827,
-
-    metalness:
-      0.1,
-
-    roughness:
-      0.55
-
+    color: 0x111827,
+    metalness: 0.1,
+    roughness: 0.55
   });
 
 
 const hitMaterial =
   new THREE.MeshBasicMaterial({
-
-    transparent:
-      true,
-
-    opacity:
-      0,
-
-    depthWrite:
-      false
-
+    transparent: true,
+    opacity: 0,
+    depthWrite: false
   });
 
 
 /* =========================================================
-   BUILD 3D BEAM
+   3D BEAM
 ========================================================= */
 
 function buildBeam(
@@ -2963,13 +2748,9 @@ function buildBeam(
 
     geometry =
       new THREE.BoxGeometry(
-
         BEAM_SCENE_LENGTH,
-
         h,
-
         b
-
       );
 
 
@@ -2983,25 +2764,18 @@ function buildBeam(
     section.type === "circle"
   ) {
 
-    const radius =
+    const r =
       section.display.d / 2;
 
 
     geometry =
       new THREE.CylinderGeometry(
-
-        radius,
-
-        radius,
-
+        r,
+        r,
         BEAM_SCENE_LENGTH,
-
         48,
-
         1,
-
         false
-
       );
 
 
@@ -3011,7 +2785,7 @@ function buildBeam(
 
 
     halfHeight =
-      radius;
+      r;
 
   }
 
@@ -3033,19 +2807,12 @@ function buildBeam(
 
 
     shape.absarc(
-
       0,
-
       0,
-
       R,
-
       0,
-
       Math.PI * 2,
-
       false
-
     );
 
 
@@ -3054,19 +2821,12 @@ function buildBeam(
 
 
     hole.absarc(
-
       0,
-
       0,
-
       r,
-
       0,
-
       Math.PI * 2,
-
       true
-
     );
 
 
@@ -3081,30 +2841,19 @@ function buildBeam(
         shape,
 
         {
-          depth:
-            BEAM_SCENE_LENGTH,
-
-          bevelEnabled:
-            false,
-
-          curveSegments:
-            48,
-
-          steps:
-            1
+          depth: BEAM_SCENE_LENGTH,
+          bevelEnabled: false,
+          curveSegments: 48,
+          steps: 1
         }
 
       );
 
 
     geometry.translate(
-
       0,
-
       0,
-
       -BEAM_SCENE_LENGTH / 2
-
     );
 
 
@@ -3215,27 +2964,18 @@ function buildBeam(
         shape,
 
         {
-          depth:
-            BEAM_SCENE_LENGTH,
-
-          bevelEnabled:
-            false,
-
-          steps:
-            1
+          depth: BEAM_SCENE_LENGTH,
+          bevelEnabled: false,
+          steps: 1
         }
 
       );
 
 
     geometry.translate(
-
       0,
-
       0,
-
       -BEAM_SCENE_LENGTH / 2
-
     );
 
 
@@ -3255,11 +2995,8 @@ function buildBeam(
 
   const mesh =
     new THREE.Mesh(
-
       geometry,
-
       beamMaterial()
-
     );
 
 
@@ -3277,18 +3014,15 @@ function buildBeam(
 
 
   return {
-
     mesh,
-
     halfHeight
-
   };
 
 }
 
 
 /* =========================================================
-   SIMPLY SUPPORTED
+   SUPPORTS
 ========================================================= */
 
 function addSimplySupportedSupports(
@@ -3320,15 +3054,9 @@ function addSimplySupportedSupports(
 
 
   pin.position.set(
-
     -HALF_BEAM,
-
-    apexY
-    -
-    supportH / 2,
-
+    apexY - supportH / 2,
     0
-
   );
 
 
@@ -3356,17 +3084,9 @@ function addSimplySupportedSupports(
 
 
   pinBase.position.set(
-
     -HALF_BEAM,
-
-    apexY
-    -
-    supportH
-    -
-    0.06,
-
+    apexY - supportH - 0.06,
     0
-
   );
 
 
@@ -3394,15 +3114,9 @@ function addSimplySupportedSupports(
 
 
   rollerCone.position.set(
-
     HALF_BEAM,
-
-    apexY
-    -
-    supportH / 2,
-
+    apexY - supportH / 2,
     0
-
   );
 
 
@@ -3416,15 +3130,10 @@ function addSimplySupportedSupports(
 
 
   const rollerY =
-
     apexY
-
     -
-
     supportH
-
     -
-
     0.16;
 
 
@@ -3455,13 +3164,9 @@ function addSimplySupportedSupports(
 
 
       roller.position.set(
-
         HALF_BEAM,
-
         rollerY,
-
         z
-
       );
 
 
@@ -3493,13 +3198,9 @@ function addSimplySupportedSupports(
 
 
   rollerBase.position.set(
-
     HALF_BEAM,
-
     rollerY - 0.18,
-
     0
-
   );
 
 
@@ -3513,10 +3214,6 @@ function addSimplySupportedSupports(
 
 }
 
-
-/* =========================================================
-   CANTILEVER
-========================================================= */
 
 function addCantileverSupport(
   halfHeight
@@ -3551,13 +3248,9 @@ function addCantileverSupport(
 
 
   wall.position.set(
-
     -HALF_BEAM - 0.2,
-
     0,
-
     0
-
   );
 
 
@@ -3578,13 +3271,9 @@ function addCantileverSupport(
     new THREE.Mesh(
 
       new THREE.BoxGeometry(
-
         0.12,
-
         wallH * 0.94,
-
         wallD * 0.94
-
       ),
 
       supportMaterial
@@ -3593,13 +3282,9 @@ function addCantileverSupport(
 
 
   frontPlate.position.set(
-
     -HALF_BEAM + 0.02,
-
     0,
-
     0
-
   );
 
 
@@ -3654,7 +3339,6 @@ function addPointLoad(
 
 
   sphere.position.y =
-
     halfHeight
     +
     shaftH
@@ -3677,15 +3361,10 @@ function addPointLoad(
     new THREE.Mesh(
 
       new THREE.CylinderGeometry(
-
         0.055,
-
         0.055,
-
         shaftH,
-
         20
-
       ),
 
       redMaterial
@@ -3694,7 +3373,6 @@ function addPointLoad(
 
 
   shaft.position.y =
-
     halfHeight
     +
     coneH
@@ -3745,12 +3423,11 @@ function addPointLoad(
 
 
   /*
-    실제 화살표보다 큰
-    투명한 drag 영역
+    실제 화살표보다 넓은
+    투명 Drag Hitbox
   */
 
   const hitHeight =
-
     shaftH
     +
     coneH
@@ -3762,13 +3439,9 @@ function addPointLoad(
     new THREE.Mesh(
 
       new THREE.BoxGeometry(
-
         0.85,
-
         hitHeight,
-
         0.85
-
       ),
 
       hitMaterial
@@ -3777,7 +3450,6 @@ function addPointLoad(
 
 
   hit.position.y =
-
     halfHeight
     +
     hitHeight / 2
@@ -3824,7 +3496,6 @@ function addDeflectionCurve(
   ) {
 
     const xReal =
-
       state.L
       *
       i
@@ -3853,21 +3524,13 @@ function addDeflectionCurve(
       Math.abs(
 
         deflectionAtX(
-
           state.beamType,
-
           xReal,
-
           state.P,
-
           state.L,
-
           state.a,
-
           state.E,
-
           state.section.I
-
         )
 
       );
@@ -3891,15 +3554,9 @@ function addDeflectionCurve(
     points.push(
 
       new THREE.Vector3(
-
         xLocal,
-
-        -ratio
-        *
-        DEFLECTION_VISUAL_AMPLITUDE,
-
+        -ratio * DEFLECTION_VISUAL_AMPLITUDE,
         0
-
       )
 
     );
@@ -3917,33 +3574,18 @@ function addDeflectionCurve(
     new THREE.Mesh(
 
       new THREE.TubeGeometry(
-
         curve,
-
         180,
-
         0.035,
-
         10,
-
         false
-
       ),
 
       new THREE.MeshStandardMaterial({
-
-        color:
-          0x2563eb,
-
-        emissive:
-          0x102a66,
-
-        emissiveIntensity:
-          0.14,
-
-        roughness:
-          0.35
-
+        color: 0x2563eb,
+        emissive: 0x102a66,
+        emissiveIntensity: 0.14,
+        roughness: 0.35
       })
 
     );
@@ -3990,13 +3632,9 @@ function addDeflectionCurve(
 
 
   marker.position.set(
-
     maxLocalX,
-
     -DEFLECTION_VISUAL_AMPLITUDE,
-
     0
-
   );
 
 
@@ -4012,7 +3650,7 @@ function addDeflectionCurve(
 
 
 /* =========================================================
-   CLEAR STRUCTURE
+   CLEAR 3D
 ========================================================= */
 
 function clearStructure() {
@@ -4075,10 +3713,8 @@ function clearStructure() {
           ) {
 
             child.material.forEach(
-
-              material =>
-                material.dispose()
-
+              m =>
+                m.dispose()
             );
 
           }
@@ -4189,48 +3825,32 @@ function calculateBeam(
 
 
   if (
-
     Number.isFinite(L)
-
     &&
-
     Number.isFinite(a)
-
   ) {
 
     if (
-
       beamType === "simply"
-
       &&
-
       a >= L
-
     ) {
 
       errors.push(
-
         "For a simply supported beam, Load Position must be smaller than Beam Length."
-
       );
 
     }
 
 
     if (
-
       beamType === "cantilever"
-
       &&
-
       a > L
-
     ) {
 
       errors.push(
-
         "For a cantilever beam, Load Position cannot exceed Beam Length."
-
       );
 
     }
@@ -4241,9 +3861,7 @@ function calculateBeam(
   const section =
 
     Number.isFinite(L)
-
     &&
-
     L > 0
 
       ?
@@ -4259,13 +3877,9 @@ function calculateBeam(
 
 
   if (
-
     errors.length
-
     ||
-
     !section
-
   ) {
 
     if (
@@ -4284,50 +3898,34 @@ function calculateBeam(
   }
 
 
-  let Mmax;
+  const Mmax =
 
-
-  if (
     beamType === "simply"
-  ) {
 
-    const b =
-      L - a;
-
-
-    Mmax =
+      ?
 
       P
       *
       a
       *
-      b
+      (
+        L - a
+      )
       /
-      L;
+      L
 
-  }
-
-
-  else {
-
-    Mmax =
+      :
 
       P
       *
       a;
 
-  }
-
 
   const maxX =
     maxDeflectionPosition(
-
       beamType,
-
       L,
-
       a
-
     );
 
 
@@ -4335,28 +3933,19 @@ function calculateBeam(
     Math.abs(
 
       deflectionAtX(
-
         beamType,
-
         maxX,
-
         P,
-
         L,
-
         a,
-
         E,
-
         section.I
-
       )
 
     );
 
 
   const maxStress =
-
     Mmax
     *
     section.c
@@ -4365,7 +3954,6 @@ function calculateBeam(
 
 
   const maxStrain =
-
     maxStress
     /
     E;
@@ -4493,9 +4081,8 @@ function rebuild3D(
 
 
   /*
-    중요:
-    더 이상 특정 각도를
-    structure 자체에 강제로 주지 않음
+    Beam + Support는 항상
+    실제 3D 공간에서 수평
   */
 
   structureGroup.rotation.set(
@@ -4625,7 +4212,7 @@ function updatePointer(
 }
 
 
-function pointerHitsLoad(
+function getLoadHit(
   event
 ) {
 
@@ -4633,7 +4220,7 @@ function pointerHitsLoad(
     !loadHitbox
   ) {
 
-    return false;
+    return null;
 
   }
 
@@ -4649,31 +4236,231 @@ function pointerHitsLoad(
   );
 
 
-  return (
+  const hits =
+    raycaster.intersectObject(
+      loadHitbox,
+      false
+    );
 
-    raycaster
-      .intersectObject(
-        loadHitbox,
-        false
-      )
-      .length
 
-    >
+  return hits.length
 
-    0
+    ?
 
+    hits[0]
+
+    :
+
+    null;
+
+}
+
+
+function pointerHitsLoad(
+  event
+) {
+
+  return !!getLoadHit(
+    event
   );
 
 }
 
 
 /* =========================================================
-   LOAD DRAG
-   Rotate / Pan / Zoom 후에도 안정적으로
-   Beam 방향으로 drag되도록 Screen 좌표 사용
+   POINT LOAD DRAG
+
+   핵심 수정:
+   1) 클릭 순간 Grab Offset 저장
+   2) Drag용 3D Plane 생성
+   3) 마우스 이동량과 Load 이동이 거의 1:1이 되도록 함
 ========================================================= */
 
-function getLoadPositionFromScreen(
+function prepareLoadDrag(
+  hit
+) {
+
+  if (
+    !hit
+    ||
+    !lastValidState
+  ) {
+
+    return false;
+
+  }
+
+
+  structureGroup.updateMatrixWorld(
+    true
+  );
+
+
+  /*
+    Beam의 월드 좌표 방향
+  */
+
+  const beamAxisWorld =
+
+    new THREE.Vector3(
+      1,
+      0,
+      0
+    )
+      .transformDirection(
+        structureGroup.matrixWorld
+      )
+      .normalize();
+
+
+  /*
+    Drag Plane을 Camera 쪽을 최대한 바라보게 하면서
+    동시에 Beam 축을 포함하도록 구성
+  */
+
+  const cameraVector =
+    camera.position
+      .clone()
+      .sub(
+        hit.point
+      );
+
+
+  const planeNormal =
+
+    cameraVector
+      .clone()
+      .sub(
+
+        beamAxisWorld
+          .clone()
+          .multiplyScalar(
+
+            cameraVector.dot(
+              beamAxisWorld
+            )
+
+          )
+
+      );
+
+
+  if (
+    planeNormal.lengthSq()
+    <
+    1e-10
+  ) {
+
+    camera.getWorldDirection(
+      planeNormal
+    );
+
+
+    planeNormal.negate();
+
+
+    planeNormal.sub(
+
+      beamAxisWorld
+        .clone()
+        .multiplyScalar(
+
+          planeNormal.dot(
+            beamAxisWorld
+          )
+
+        )
+
+    );
+
+  }
+
+
+  if (
+    planeNormal.lengthSq()
+    <
+    1e-10
+  ) {
+
+    return false;
+
+  }
+
+
+  planeNormal.normalize();
+
+
+  loadDragPlane.setFromNormalAndCoplanarPoint(
+    planeNormal,
+    hit.point
+  );
+
+
+  const startWorld =
+    new THREE.Vector3();
+
+
+  if (
+    !raycaster.ray.intersectPlane(
+      loadDragPlane,
+      startWorld
+    )
+  ) {
+
+    return false;
+
+  }
+
+
+  const startLocal =
+    structureGroup.worldToLocal(
+      startWorld.clone()
+    );
+
+
+  /*
+    현재 화살표의 Beam 축 좌표
+  */
+
+  const currentLoadLocalX =
+
+    -HALF_BEAM
+
+    +
+
+    BEAM_SCENE_LENGTH
+
+    *
+
+    (
+      lastValidState.a
+      /
+      lastValidState.L
+    );
+
+
+  /*
+    클릭한 지점과 화살표 중심의 차이를 저장.
+
+    따라서 화살표 몸통 어느 부분을 클릭해도
+    클릭 순간 갑자기 점프하지 않음.
+  */
+
+  loadDragLocalXOffset =
+
+    startLocal.x
+
+    -
+
+    currentLoadLocalX;
+
+
+  return true;
+
+}
+
+
+function getLoadPositionFromDragPlane(
   event
 ) {
 
@@ -4686,174 +4473,26 @@ function getLoadPositionFromScreen(
   }
 
 
-  const rect =
-    renderer
-      .domElement
-      .getBoundingClientRect();
-
-
-  const leftWorld =
-    new THREE.Vector3(
-
-      -HALF_BEAM,
-
-      0,
-
-      0
-
-    );
-
-
-  const rightWorld =
-    new THREE.Vector3(
-
-      HALF_BEAM,
-
-      0,
-
-      0
-
-    );
-
-
-  structureGroup.localToWorld(
-    leftWorld
+  updatePointer(
+    event
   );
 
 
-  structureGroup.localToWorld(
-    rightWorld
+  raycaster.setFromCamera(
+    pointer,
+    camera
   );
 
 
-  const leftNDC =
-    leftWorld
-      .clone()
-      .project(
-        camera
-      );
-
-
-  const rightNDC =
-    rightWorld
-      .clone()
-      .project(
-        camera
-      );
-
-
-  const leftScreen =
-    new THREE.Vector2(
-
-      rect.left
-
-      +
-
-      (
-        leftNDC.x + 1
-      )
-
-      *
-
-      0.5
-
-      *
-
-      rect.width,
-
-
-      rect.top
-
-      +
-
-      (
-        1 - leftNDC.y
-      )
-
-      *
-
-      0.5
-
-      *
-
-      rect.height
-
-    );
-
-
-  const rightScreen =
-    new THREE.Vector2(
-
-      rect.left
-
-      +
-
-      (
-        rightNDC.x + 1
-      )
-
-      *
-
-      0.5
-
-      *
-
-      rect.width,
-
-
-      rect.top
-
-      +
-
-      (
-        1 - rightNDC.y
-      )
-
-      *
-
-      0.5
-
-      *
-
-      rect.height
-
-    );
-
-
-  const mouse =
-    new THREE.Vector2(
-
-      event.clientX,
-
-      event.clientY
-
-    );
-
-
-  const beamVector =
-
-    rightScreen
-      .clone()
-      .sub(
-        leftScreen
-      );
-
-
-  const mouseVector =
-
-    mouse
-      .clone()
-      .sub(
-        leftScreen
-      );
-
-
-  const denominator =
-    beamVector.lengthSq();
+  const worldPoint =
+    new THREE.Vector3();
 
 
   if (
-    denominator < 1e-8
+    !raycaster.ray.intersectPlane(
+      loadDragPlane,
+      worldPoint
+    )
   ) {
 
     return null;
@@ -4861,49 +4500,57 @@ function getLoadPositionFromScreen(
   }
 
 
+  const localPoint =
+    structureGroup.worldToLocal(
+      worldPoint.clone()
+    );
+
+
+  /*
+    Grab Offset을 빼므로
+    마우스와 화살표가 같은 이동량으로 움직임
+  */
+
+  const desiredLocalX =
+
+    localPoint.x
+
+    -
+
+    loadDragLocalXOffset;
+
+
   let ratio =
 
-    mouseVector.dot(
-      beamVector
+    (
+      desiredLocalX
+      +
+      HALF_BEAM
     )
 
     /
 
-    denominator;
+    BEAM_SCENE_LENGTH;
 
 
   ratio =
     THREE.MathUtils.clamp(
-
       ratio,
-
       0,
-
       1
-
     );
 
 
   let a =
-
     ratio
-
     *
-
     lastValidState.L;
 
 
   const minA =
     Math.max(
-
-      lastValidState.L
-
-      *
-
-      0.002,
-
+      lastValidState.L * 0.002,
       0.001
-
     );
 
 
@@ -4915,15 +4562,9 @@ function getLoadPositionFromScreen(
 
     a =
       THREE.MathUtils.clamp(
-
         a,
-
         minA,
-
-        lastValidState.L
-        -
-        minA
-
+        lastValidState.L - minA
       );
 
   }
@@ -4933,13 +4574,9 @@ function getLoadPositionFromScreen(
 
     a =
       THREE.MathUtils.clamp(
-
         a,
-
         minA,
-
         lastValidState.L
-
       );
 
   }
@@ -4989,7 +4626,10 @@ renderer.domElement.addEventListener(
 
 
 /* =========================================================
-   START POINT LOAD DRAG
+   START LOAD DRAG
+
+   Capture phase를 사용하여
+   빨간 화살표 클릭 시 OrbitControls Rotate보다 먼저 처리
 ========================================================= */
 
 renderer.domElement.addEventListener(
@@ -4999,14 +4639,9 @@ renderer.domElement.addEventListener(
   event => {
 
     /*
-      왼쪽 버튼:
-      Point Load
+      왼쪽 버튼만 Point Load Drag.
 
-      가운데 버튼:
-      OrbitControls Pan
-
-      따라서 Point Load 위에서
-      가운데 버튼을 눌러도 Pan 가능
+      가운데 휠 버튼은 그대로 Pan에 사용.
     */
 
     if (
@@ -5018,9 +4653,29 @@ renderer.domElement.addEventListener(
     }
 
 
-    if (
-      !pointerHitsLoad(
+    const hit =
+      getLoadHit(
         event
+      );
+
+
+    /*
+      빈 공간이라면 아무것도 막지 않음.
+      따라서 OrbitControls Rotate 실행.
+    */
+
+    if (
+      !hit
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      !prepareLoadDrag(
+        hit
       )
     ) {
 
@@ -5047,8 +4702,7 @@ renderer.domElement.addEventListener(
 
 
     /*
-      Point Load 움직이는 동안
-      카메라 Rotate 방지
+      Load 이동 중 Camera Rotate 방지
     */
 
     controls.enabled =
@@ -5065,10 +4719,10 @@ renderer.domElement.addEventListener(
     event.preventDefault();
 
 
-    event.stopPropagation();
+    event.stopImmediatePropagation();
 
-  }
-
+  },
+  true
 );
 
 
@@ -5083,13 +4737,9 @@ renderer.domElement.addEventListener(
   event => {
 
     if (
-
       !draggingLoad
-
       ||
-
       !lastValidState
-
     ) {
 
       return;
@@ -5098,7 +4748,7 @@ renderer.domElement.addEventListener(
 
 
     const a =
-      getLoadPositionFromScreen(
+      getLoadPositionFromDragPlane(
         event
       );
 
@@ -5344,22 +4994,15 @@ function resizeRenderer() {
 
 
   renderer.setSize(
-
     width,
-
     height,
-
     false
-
   );
 
 
   camera.aspect =
-
     width
-
     /
-
     height;
 
 
@@ -5379,7 +5022,7 @@ resizeRenderer();
 
 
 /* =========================================================
-   LOOP
+   RENDER LOOP
 ========================================================= */
 
 function animate() {
