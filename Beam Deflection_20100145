@@ -1,0 +1,174 @@
+        <button type="button" onclick="calculateBeam()">CALCULATE</button>
+      </div>
+
+      <div id="errorBox" class="error"></div>
+    </div>
+
+    <div class="card">
+      <h2>Calculation Results</h2>
+
+      <div class="results">
+        <div class="result-box">
+          <div class="result-label">Maximum Moment</div>
+          <div class="result-value" id="momentResult">—</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Maximum Deflection</div>
+          <div class="result-value" id="deflectionResult">—</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Maximum Stress</div>
+          <div class="result-value" id="stressResult">—</div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Maximum Strain</div>
+          <div class="result-value" id="strainResult">—</div>
+        </div>
+      </div>
+
+      <p class="note">
+        Internal units: N, mm, MPa. For the rectangular cross section,
+        I = bh³/12. Maximum deflection is obtained by evaluating the elastic
+        deflection curve along the beam. The position of maximum deflection is
+        intentionally not displayed in Version 1.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function calculateBeam() {
+      const beamType = document.getElementById("beamType").value;
+      const E = parseFloat(document.getElementById("material").value); // MPa = N/mm²
+      const L = parseFloat(document.getElementById("length").value);   // mm
+      const P = parseFloat(document.getElementById("load").value);     // N
+      const a = parseFloat(document.getElementById("position").value); // mm
+      const width = parseFloat(document.getElementById("width").value); // mm
+      const height = parseFloat(document.getElementById("height").value); // mm
+
+      const errorBox = document.getElementById("errorBox");
+      errorBox.style.display = "none";
+      errorBox.textContent = "";
+
+      if (
+        !Number.isFinite(E) ||
+        !Number.isFinite(L) ||
+        !Number.isFinite(P) ||
+        !Number.isFinite(a) ||
+        !Number.isFinite(width) ||
+        !Number.isFinite(height)
+      ) {
+        showError("Please enter valid numerical values.");
+        return;
+      }
+
+      if (L <= 0 || P <= 0 || width <= 0 || height <= 0) {
+        showError("Beam length, load, width, and height must be greater than zero.");
+        return;
+      }
+
+      if (a <= 0 || a > L) {
+        showError("Load position must be greater than 0 and less than or equal to the beam length.");
+        return;
+      }
+
+      // Rectangular cross section
+      const I = width * Math.pow(height, 3) / 12; // mm^4
+      const c = height / 2;                       // mm
+
+      let Mmax = 0;          // N·mm
+      let maxDeflection = 0; // mm
+
+      if (beamType === "simply") {
+        if (a >= L) {
+          showError("For a simply supported beam, the load position must be less than the beam length.");
+          return;
+        }
+
+        const rightDistance = L - a;
+
+        // Maximum bending moment at point load
+        Mmax = P * a * rightDistance / L;
+
+        // Evaluate elastic curve numerically and keep only the largest magnitude.
+        // x <= a:
+        // y = P*b*x/(6LEI) * (L² - b² - x²)
+        //
+        // x >= a:
+        // y = P*a*(L-x)/(6LEI) * (L² - a² - (L-x)²)
+        const samples = 2000;
+
+        for (let i = 0; i <= samples; i++) {
+          const x = L * i / samples;
+          let y;
+
+          if (x <= a) {
+            y =
+              P * rightDistance * x *
+              (L * L - rightDistance * rightDistance - x * x) /
+              (6 * L * E * I);
+          } else {
+            const lx = L - x;
+            y =
+              P * a * lx *
+              (L * L - a * a - lx * lx) /
+              (6 * L * E * I);
+          }
+
+          maxDeflection = Math.max(maxDeflection, Math.abs(y));
+        }
+      } else {
+        // Cantilever beam with a point load located 'a' from the fixed end.
+        Mmax = P * a;
+
+        // For 0 <= x <= a:
+        // y = P*x²*(3a-x)/(6EI)
+        //
+        // For a <= x <= L:
+        // y = P*a²*(3x-a)/(6EI)
+        //
+        // The maximum occurs at the free end x = L.
+        maxDeflection =
+          P * Math.pow(a, 2) * (3 * L - a) /
+          (6 * E * I);
+      }
+
+      const maxStress = Mmax * c / I; // MPa
+      const maxStrain = maxStress / E;
+
+      // Convert N·mm to kN·m: 1 kN·m = 1,000,000 N·mm
+      const momentKNm = Mmax / 1e6;
+
+      document.getElementById("momentResult").textContent =
+        formatNumber(momentKNm, 4) + " kN·m";
+
+      document.getElementById("deflectionResult").textContent =
+        formatNumber(maxDeflection, 4) + " mm";
+
+      document.getElementById("stressResult").textContent =
+        formatNumber(maxStress, 4) + " MPa";
+
+      document.getElementById("strainResult").textContent =
+        maxStrain.toExponential(6);
+    }
+
+    function showError(message) {
+      const errorBox = document.getElementById("errorBox");
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+    }
+
+    function formatNumber(value, digits) {
+      if (!Number.isFinite(value)) return "—";
+      return value.toLocaleString(undefined, {
+        maximumFractionDigits: digits
+      });
+    }
+
+    // Run once using the default values.
+    calculateBeam();
+  </script>
+</body>
+</html>
