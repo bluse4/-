@@ -1,174 +1,96 @@
-        <button type="button" onclick="calculateBeam()">CALCULATE</button>
-      </div>
-
-      <div id="errorBox" class="error"></div>
-    </div>
-
-    <div class="card">
-      <h2>Calculation Results</h2>
-
-      <div class="results">
-        <div class="result-box">
-          <div class="result-label">Maximum Moment</div>
-          <div class="result-value" id="momentResult">—</div>
-        </div>
-
-        <div class="result-box">
-          <div class="result-label">Maximum Deflection</div>
-          <div class="result-value" id="deflectionResult">—</div>
-        </div>
-
-        <div class="result-box">
-          <div class="result-label">Maximum Stress</div>
-          <div class="result-value" id="stressResult">—</div>
-        </div>
-
-        <div class="result-box">
-          <div class="result-label">Maximum Strain</div>
-          <div class="result-value" id="strainResult">—</div>
-        </div>
-      </div>
-
-      <p class="note">
-        Internal units: N, mm, MPa. For the rectangular cross section,
-        I = bh³/12. Maximum deflection is obtained by evaluating the elastic
-        deflection curve along the beam. The position of maximum deflection is
-        intentionally not displayed in Version 1.
-      </p>
-    </div>
-  </div>
-
-  <script>
-    function calculateBeam() {
-      const beamType = document.getElementById("beamType").value;
-      const E = parseFloat(document.getElementById("material").value); // MPa = N/mm²
-      const L = parseFloat(document.getElementById("length").value);   // mm
-      const P = parseFloat(document.getElementById("load").value);     // N
-      const a = parseFloat(document.getElementById("position").value); // mm
-      const width = parseFloat(document.getElementById("width").value); // mm
-      const height = parseFloat(document.getElementById("height").value); // mm
-
-      const errorBox = document.getElementById("errorBox");
-      errorBox.style.display = "none";
-      errorBox.textContent = "";
-
-      if (
-        !Number.isFinite(E) ||
-        !Number.isFinite(L) ||
-        !Number.isFinite(P) ||
-        !Number.isFinite(a) ||
-        !Number.isFinite(width) ||
-        !Number.isFinite(height)
-      ) {
-        showError("Please enter valid numerical values.");
-        return;
-      }
-
-      if (L <= 0 || P <= 0 || width <= 0 || height <= 0) {
-        showError("Beam length, load, width, and height must be greater than zero.");
-        return;
-      }
-
-      if (a <= 0 || a > L) {
-        showError("Load position must be greater than 0 and less than or equal to the beam length.");
-        return;
-      }
-
-      // Rectangular cross section
-      const I = width * Math.pow(height, 3) / 12; // mm^4
-      const c = height / 2;                       // mm
-
-      let Mmax = 0;          // N·mm
-      let maxDeflection = 0; // mm
-
-      if (beamType === "simply") {
-        if (a >= L) {
-          showError("For a simply supported beam, the load position must be less than the beam length.");
-          return;
-        }
-
-        const rightDistance = L - a;
-
-        // Maximum bending moment at point load
-        Mmax = P * a * rightDistance / L;
-
-        // Evaluate elastic curve numerically and keep only the largest magnitude.
-        // x <= a:
-        // y = P*b*x/(6LEI) * (L² - b² - x²)
-        //
-        // x >= a:
-        // y = P*a*(L-x)/(6LEI) * (L² - a² - (L-x)²)
-        const samples = 2000;
-
-        for (let i = 0; i <= samples; i++) {
-          const x = L * i / samples;
-          let y;
-
-          if (x <= a) {
-            y =
-              P * rightDistance * x *
-              (L * L - rightDistance * rightDistance - x * x) /
-              (6 * L * E * I);
-          } else {
-            const lx = L - x;
-            y =
-              P * a * lx *
-              (L * L - a * a - lx * lx) /
-              (6 * L * E * I);
-          }
-
-          maxDeflection = Math.max(maxDeflection, Math.abs(y));
-        }
-      } else {
-        // Cantilever beam with a point load located 'a' from the fixed end.
-        Mmax = P * a;
-
-        // For 0 <= x <= a:
-        // y = P*x²*(3a-x)/(6EI)
-        //
-        // For a <= x <= L:
-        // y = P*a²*(3x-a)/(6EI)
-        //
-        // The maximum occurs at the free end x = L.
-        maxDeflection =
-          P * Math.pow(a, 2) * (3 * L - a) /
-          (6 * E * I);
-      }
-
-      const maxStress = Mmax * c / I; // MPa
-      const maxStrain = maxStress / E;
-
-      // Convert N·mm to kN·m: 1 kN·m = 1,000,000 N·mm
-      const momentKNm = Mmax / 1e6;
-
-      document.getElementById("momentResult").textContent =
-        formatNumber(momentKNm, 4) + " kN·m";
-
-      document.getElementById("deflectionResult").textContent =
-        formatNumber(maxDeflection, 4) + " mm";
-
-      document.getElementById("stressResult").textContent =
-        formatNumber(maxStress, 4) + " MPa";
-
-      document.getElementById("strainResult").textContent =
-        maxStrain.toExponential(6);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beam Deflection Calculator - Version 1</title>
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-    function showError(message) {
-      const errorBox = document.getElementById("errorBox");
-      errorBox.textContent = message;
-      errorBox.style.display = "block";
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
     }
 
-    function formatNumber(value, digits) {
-      if (!Number.isFinite(value)) return "—";
-      return value.toLocaleString(undefined, {
-        maximumFractionDigits: digits
-      });
+    .container {
+      max-width: 980px;
+      margin: 40px auto;
+      padding: 0 20px;
     }
 
-    // Run once using the default values.
-    calculateBeam();
-  </script>
-</body>
-</html>
+    .card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 28px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      margin: 0 0 26px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      background: white;
+    }
+
+    input:focus,
+    select:focus {
+      outline: 2px solid #dbeafe;
+      border-color: #3b82f6;
+    }
+
+    .fixed-value {
+      padding: 12px 13px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #f9fafb;
+      color: #374151;
+      font-size: 15px;
+    }
+
+    .button-wrap {
+      margin-top: 24px;
+    }
+
+    button {
+      width: 100%;
