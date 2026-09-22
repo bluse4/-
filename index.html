@@ -19,14 +19,19 @@
       color: #1f2937;
     }
 
+    body.dragging {
+      cursor: grabbing !important;
+      user-select: none;
+    }
+
     .container {
-      max-width: 1100px;
+      max-width: 1120px;
       margin: 36px auto;
       padding: 0 20px;
     }
 
     .card {
-      background: white;
+      background: #ffffff;
       border-radius: 14px;
       padding: 26px;
       margin-bottom: 22px;
@@ -150,43 +155,29 @@
     svg {
       display: block;
       width: 100%;
-      min-width: 760px;
-      height: 340px;
-
+      min-width: 820px;
+      height: 430px;
       background: #fbfbfc;
-
       border: 1px solid #e5e7eb;
       border-radius: 10px;
-
       touch-action: none;
-      user-select: none;
-    }
-
-    .legend {
-      margin-top: 12px;
-      font-size: 13px;
-      color: #6b7280;
-      line-height: 1.7;
-    }
-
-    .note {
-      margin-top: 18px;
-      color: #6b7280;
-      font-size: 13px;
-      line-height: 1.65;
     }
 
     .drag-note {
-      margin-top: 10px;
-
+      margin-top: 12px;
       padding: 10px 12px;
-
       background: #eff6ff;
-      border-radius: 8px;
-
       color: #1e40af;
-
+      border-radius: 8px;
       font-size: 13px;
+    }
+
+    .legend,
+    .note {
+      margin-top: 12px;
+      color: #6b7280;
+      font-size: 13px;
+      line-height: 1.65;
     }
 
     .small {
@@ -196,7 +187,6 @@
     }
 
     @media (max-width: 760px) {
-
       .grid,
       .results {
         grid-template-columns: 1fr;
@@ -206,7 +196,6 @@
         margin-top: 18px;
       }
     }
-
   </style>
 </head>
 
@@ -220,26 +209,19 @@
 
   <div class="card">
 
-    <h1>
-      Beam Deflection Calculator
-    </h1>
+    <h1>Beam Deflection Calculator</h1>
 
     <p class="subtitle">
-      Version 2 - Cross-section expansion,
-      2.5D beam visualization,
-      detailed validation,
+      Version 2 - Enhanced 2.5D visualization,
       draggable point load,
+      detailed validation,
       and maximum deflection position.
     </p>
 
-
-    <h2>
-      Input Data
-    </h2>
+    <h2>Input Data</h2>
 
 
     <div class="grid">
-
 
       <div class="field">
 
@@ -260,7 +242,6 @@
         </select>
 
       </div>
-
 
 
       <div class="field">
@@ -288,7 +269,6 @@
       </div>
 
 
-
       <div class="field">
 
         <label for="length">
@@ -305,7 +285,6 @@
       </div>
 
 
-
       <div class="field">
 
         <label for="load">
@@ -320,7 +299,6 @@
         >
 
       </div>
-
 
 
       <div class="field">
@@ -343,7 +321,6 @@
         >
 
       </div>
-
 
 
       <div class="field">
@@ -374,16 +351,13 @@
 
       </div>
 
-
     </div>
-
 
 
     <div
       id="sectionFields"
       class="section-fields">
     </div>
-
 
 
     <button
@@ -395,12 +369,10 @@
     </button>
 
 
-
     <div
       id="errorBox"
       class="error">
     </div>
-
 
   </div>
 
@@ -410,44 +382,39 @@
 
   <div class="card">
 
-    <h2>
-      Beam Visualization
-    </h2>
+    <h2>Beam Visualization</h2>
 
 
     <div class="visual-wrap">
 
       <svg
         id="beamSvg"
-        viewBox="0 0 1000 340">
-
+        viewBox="0 0 1100 430">
       </svg>
 
     </div>
 
 
     <div class="drag-note">
-
-      Drag the red point-load arrow left or right.
+      Drag any part of the red point-load symbol.
       The Load Position input and calculation results
       will update automatically.
-
     </div>
 
 
     <div class="legend">
 
-      Gray 2.5D object:
+      2.5D gray object:
       undeformed beam
 
       &nbsp; | &nbsp;
 
       Blue curve:
-      exaggerated deflected shape
+      exaggerated deflected centerline
 
       &nbsp; | &nbsp;
 
-      Red arrow:
+      Red load:
       draggable point load
 
       &nbsp; | &nbsp;
@@ -457,7 +424,6 @@
 
     </div>
 
-
   </div>
 
 
@@ -466,13 +432,10 @@
 
   <div class="card">
 
-    <h2>
-      Calculation Results
-    </h2>
+    <h2>Calculation Results</h2>
 
 
     <div class="results">
-
 
       <div class="result-box">
 
@@ -483,13 +446,10 @@
         <div
           class="result-value"
           id="momentResult">
-
           -
-
         </div>
 
       </div>
-
 
 
       <div class="result-box">
@@ -501,13 +461,10 @@
         <div
           class="result-value"
           id="deflectionResult">
-
           -
-
         </div>
 
       </div>
-
 
 
       <div class="result-box">
@@ -519,13 +476,10 @@
         <div
           class="result-value"
           id="positionResult">
-
           -
-
         </div>
 
       </div>
-
 
 
       <div class="result-box">
@@ -537,13 +491,10 @@
         <div
           class="result-value"
           id="stressResult">
-
           -
-
         </div>
 
       </div>
-
 
 
       <div class="result-box">
@@ -555,13 +506,10 @@
         <div
           class="result-value"
           id="strainResult">
-
           -
-
         </div>
 
       </div>
-
 
 
       <div class="result-box">
@@ -573,16 +521,12 @@
         <div
           class="result-value"
           id="inertiaResult">
-
           -
-
         </div>
 
       </div>
 
-
     </div>
-
 
 
     <p class="note">
@@ -591,18 +535,16 @@
 
       Linear elastic Euler-Bernoulli beam behavior is assumed.
 
-      Maximum deflection position is measured from the
-      left support for a simply supported beam and
-      from the fixed end for a cantilever beam.
+      Maximum deflection position is measured from the left support
+      for a simply supported beam and from the fixed end
+      for a cantilever beam.
 
-      The 2.5D beam and deflected shape are schematic
-      visualizations and are not drawn to physical scale.
+      The 2.5D geometry and deflection are schematic and are not drawn
+      to physical scale.
 
     </p>
 
-
   </div>
-
 
 </div>
 
@@ -611,9 +553,13 @@
 <script>
 
 
-/* =====================================================
+/* =========================================================
    BASIC VARIABLES
-===================================================== */
+========================================================= */
+
+
+const beamSvg =
+  document.getElementById("beamSvg");
 
 
 const sectionType =
@@ -624,18 +570,14 @@ const sectionFields =
   document.getElementById("sectionFields");
 
 
-const beamSvg =
-  document.getElementById("beamSvg");
-
-
 let draggingLoad =
   false;
 
 
 
-/* =====================================================
-   CROSS SECTION INPUT FIELDS
-===================================================== */
+/* =========================================================
+   CROSS SECTION INPUTS
+========================================================= */
 
 
 function renderSectionFields() {
@@ -775,7 +717,6 @@ function renderSectionFields() {
 
       <div class="grid">
 
-
         <div class="field">
 
           <label for="iHeight">
@@ -839,7 +780,6 @@ function renderSectionFields() {
 
         </div>
 
-
       </div>
 
     `;
@@ -850,9 +790,9 @@ function renderSectionFields() {
 
 
 
-/* =====================================================
-   VALIDATION
-===================================================== */
+/* =========================================================
+   NUMBER VALIDATION
+========================================================= */
 
 
 function getNumber(
@@ -913,9 +853,9 @@ function getNumber(
 
 
 
-/* =====================================================
+/* =========================================================
    CROSS SECTION PROPERTIES
-===================================================== */
+========================================================= */
 
 
 function getSectionProperties(
@@ -928,12 +868,7 @@ function getSectionProperties(
 
 
 
-  /* RECTANGULAR */
-
-
-  if (
-    type === "rect"
-  ) {
+  if (type === "rect") {
 
 
     const b =
@@ -952,13 +887,11 @@ function getSectionProperties(
       );
 
 
-
     if (
       Number.isFinite(b)
       &&
       b <= 0
     ) {
-
 
       errors.push(
         "Width must be greater than 0."
@@ -967,13 +900,11 @@ function getSectionProperties(
     }
 
 
-
     if (
       Number.isFinite(h)
       &&
       h <= 0
     ) {
-
 
       errors.push(
         "Height must be greater than 0."
@@ -982,20 +913,14 @@ function getSectionProperties(
     }
 
 
-
-    if (
-      errors.length
-    ) {
-
+    if (errors.length) {
 
       return null;
 
     }
 
 
-
     return {
-
 
       I:
         b *
@@ -1005,7 +930,6 @@ function getSectionProperties(
         )
         /
         12,
-
 
       c:
         h /
@@ -1017,12 +941,7 @@ function getSectionProperties(
 
 
 
-  /* SOLID CIRCULAR */
-
-
-  if (
-    type === "circle"
-  ) {
+  if (type === "circle") {
 
 
     const d =
@@ -1033,13 +952,11 @@ function getSectionProperties(
       );
 
 
-
     if (
       Number.isFinite(d)
       &&
       d <= 0
     ) {
-
 
       errors.push(
         "Diameter must be greater than 0."
@@ -1048,20 +965,14 @@ function getSectionProperties(
     }
 
 
-
-    if (
-      errors.length
-    ) {
-
+    if (errors.length) {
 
       return null;
 
     }
 
 
-
     return {
-
 
       I:
         Math.PI *
@@ -1071,7 +982,6 @@ function getSectionProperties(
         )
         /
         64,
-
 
       c:
         d /
@@ -1083,12 +993,7 @@ function getSectionProperties(
 
 
 
-  /* HOLLOW CIRCULAR */
-
-
-  if (
-    type === "hollow"
-  ) {
+  if (type === "hollow") {
 
 
     const D =
@@ -1107,13 +1012,11 @@ function getSectionProperties(
       );
 
 
-
     if (
       Number.isFinite(D)
       &&
       D <= 0
     ) {
-
 
       errors.push(
         "Outer Diameter must be greater than 0."
@@ -1122,20 +1025,17 @@ function getSectionProperties(
     }
 
 
-
     if (
       Number.isFinite(d)
       &&
       d < 0
     ) {
 
-
       errors.push(
         "Inner Diameter cannot be negative."
       );
 
     }
-
 
 
     if (
@@ -1146,7 +1046,6 @@ function getSectionProperties(
       d >= D
     ) {
 
-
       errors.push(
         "Inner Diameter must be smaller than Outer Diameter."
       );
@@ -1154,20 +1053,14 @@ function getSectionProperties(
     }
 
 
-
-    if (
-      errors.length
-    ) {
-
+    if (errors.length) {
 
       return null;
 
     }
 
 
-
     return {
-
 
       I:
         Math.PI *
@@ -1185,7 +1078,6 @@ function getSectionProperties(
         /
         64,
 
-
       c:
         D /
         2
@@ -1194,9 +1086,6 @@ function getSectionProperties(
 
   }
 
-
-
-  /* I BEAM */
 
 
   const H =
@@ -1231,13 +1120,11 @@ function getSectionProperties(
     );
 
 
-
   if (
     Number.isFinite(H)
     &&
     H <= 0
   ) {
-
 
     errors.push(
       "Overall Height must be greater than 0."
@@ -1246,13 +1133,11 @@ function getSectionProperties(
   }
 
 
-
   if (
     Number.isFinite(B)
     &&
     B <= 0
   ) {
-
 
     errors.push(
       "Flange Width must be greater than 0."
@@ -1261,13 +1146,11 @@ function getSectionProperties(
   }
 
 
-
   if (
     Number.isFinite(tf)
     &&
     tf <= 0
   ) {
-
 
     errors.push(
       "Flange Thickness must be greater than 0."
@@ -1276,20 +1159,17 @@ function getSectionProperties(
   }
 
 
-
   if (
     Number.isFinite(tw)
     &&
     tw <= 0
   ) {
 
-
     errors.push(
       "Web Thickness must be greater than 0."
     );
 
   }
-
 
 
   if (
@@ -1300,13 +1180,11 @@ function getSectionProperties(
     2 * tf >= H
   ) {
 
-
     errors.push(
       "Twice the flange thickness must be smaller than the overall height."
     );
 
   }
-
 
 
   if (
@@ -1317,7 +1195,6 @@ function getSectionProperties(
     tw > B
   ) {
 
-
     errors.push(
       "Web Thickness cannot be larger than Flange Width."
     );
@@ -1325,23 +1202,17 @@ function getSectionProperties(
   }
 
 
-
-  if (
-    errors.length
-  ) {
-
+  if (errors.length) {
 
     return null;
 
   }
 
 
-
   const webHeight =
     H
     -
     2 * tf;
-
 
 
   const flangeI =
@@ -1371,7 +1242,6 @@ function getSectionProperties(
     );
 
 
-
   const webI =
 
     tw *
@@ -1383,16 +1253,13 @@ function getSectionProperties(
     12;
 
 
-
   return {
-
 
     I:
       2 *
       flangeI
       +
       webI,
-
 
     c:
       H /
@@ -1404,9 +1271,9 @@ function getSectionProperties(
 
 
 
-/* =====================================================
-   DEFLECTION CALCULATION
-===================================================== */
+/* =========================================================
+   DEFLECTION
+========================================================= */
 
 
 function deflectionAtX(
@@ -1427,7 +1294,6 @@ function deflectionAtX(
 
     const b =
       L - a;
-
 
 
     if (
@@ -1464,115 +1330,97 @@ function deflectionAtX(
 
 
 
-    else {
+    const lx =
+      L - x;
 
 
-      const lx =
-        L - x;
+    return (
 
-
-
-      return (
-
-        P *
-        a *
-        lx *
-
-        (
-          L * L
-          -
-          a * a
-          -
-          lx * lx
-        )
-
-      )
-
-      /
+      P *
+      a *
+      lx *
 
       (
-        6 *
-        L *
-        E *
-        I
-      );
+        L * L
+        -
+        a * a
+        -
+        lx * lx
+      )
 
-    }
+    )
+
+    /
+
+    (
+      6 *
+      L *
+      E *
+      I
+    );
 
   }
 
 
 
-  else {
+  if (
+    x <= a
+  ) {
 
 
-    if (
-      x <= a
-    ) {
+    return (
 
-
-      return (
-
-        P *
-        x *
-        x *
-
-        (
-          3 * a
-          -
-          x
-        )
-
+      P *
+      x *
+      x *
+      (
+        3 * a
+        -
+        x
       )
 
-      /
+    )
 
-      (
-        6 *
-        E *
-        I
-      );
+    /
 
-    }
-
-
-
-    else {
-
-
-      return (
-
-        P *
-        a *
-        a *
-
-        (
-          3 * x
-          -
-          a
-        )
-
-      )
-
-      /
-
-      (
-        6 *
-        E *
-        I
-      );
-
-    }
+    (
+      6 *
+      E *
+      I
+    );
 
   }
+
+
+
+  return (
+
+    P *
+    a *
+    a *
+    (
+      3 * x
+      -
+      a
+    )
+
+  )
+
+  /
+
+  (
+    6 *
+    E *
+    I
+  );
 
 }
 
 
 
-/* =====================================================
+/* =========================================================
    MAX DEFLECTION
-===================================================== */
+========================================================= */
 
 
 function findMaxDeflection(
@@ -1597,7 +1445,6 @@ function findMaxDeflection(
     0;
 
 
-
   for (
     let i = 0;
     i <= samples;
@@ -1610,7 +1457,6 @@ function findMaxDeflection(
       i
       /
       samples;
-
 
 
     const y =
@@ -1627,7 +1473,6 @@ function findMaxDeflection(
         )
 
       );
-
 
 
     if (
@@ -1648,7 +1493,6 @@ function findMaxDeflection(
   }
 
 
-
   return {
 
     maxDeflection:
@@ -1663,9 +1507,9 @@ function findMaxDeflection(
 
 
 
-/* =====================================================
-   ERROR MESSAGE
-===================================================== */
+/* =========================================================
+   ERROR
+========================================================= */
 
 
 function showError(
@@ -1712,9 +1556,9 @@ function clearError() {
 
 
 
-/* =====================================================
-   NUMBER FORMAT
-===================================================== */
+/* =========================================================
+   FORMAT
+========================================================= */
 
 
 function formatNumber(
@@ -1735,9 +1579,9 @@ function formatNumber(
 
 
 
-/* =====================================================
-   MAIN CALCULATION
-===================================================== */
+/* =========================================================
+   CALCULATION
+========================================================= */
 
 
 function calculateBeam() {
@@ -1766,7 +1610,6 @@ function calculateBeam() {
     );
 
 
-
   const L =
     getNumber(
       "length",
@@ -1791,13 +1634,11 @@ function calculateBeam() {
     );
 
 
-
   if (
     Number.isFinite(L)
     &&
     L <= 0
   ) {
-
 
     errors.push(
       "Beam Length must be greater than 0."
@@ -1806,13 +1647,11 @@ function calculateBeam() {
   }
 
 
-
   if (
     Number.isFinite(P)
     &&
     P <= 0
   ) {
-
 
     errors.push(
       "Point Load must be greater than 0."
@@ -1821,20 +1660,17 @@ function calculateBeam() {
   }
 
 
-
   if (
     Number.isFinite(a)
     &&
     a <= 0
   ) {
 
-
     errors.push(
       "Load Position must be greater than 0."
     );
 
   }
-
 
 
   if (
@@ -1850,7 +1686,6 @@ function calculateBeam() {
       a >= L
     ) {
 
-
       errors.push(
         "For a simply supported beam, Load Position must be smaller than Beam Length."
       );
@@ -1858,13 +1693,11 @@ function calculateBeam() {
     }
 
 
-
     if (
       beamType === "cantilever"
       &&
       a > L
     ) {
-
 
       errors.push(
         "For a cantilever beam, Load Position cannot exceed Beam Length."
@@ -1875,12 +1708,10 @@ function calculateBeam() {
   }
 
 
-
   const section =
     getSectionProperties(
       errors
     );
-
 
 
   if (
@@ -1900,7 +1731,6 @@ function calculateBeam() {
   }
 
 
-
   const I =
     section.I;
 
@@ -1909,10 +1739,8 @@ function calculateBeam() {
     section.c;
 
 
-
   let Mmax =
     0;
-
 
 
   if (
@@ -1934,7 +1762,6 @@ function calculateBeam() {
   }
 
 
-
   else {
 
 
@@ -1943,7 +1770,6 @@ function calculateBeam() {
       a;
 
   }
-
 
 
   const deflectionData =
@@ -1957,14 +1783,12 @@ function calculateBeam() {
     );
 
 
-
   const maxDeflection =
     deflectionData.maxDeflection;
 
 
   const maxX =
     deflectionData.maxX;
-
 
 
   const maxStress =
@@ -1974,12 +1798,10 @@ function calculateBeam() {
     I;
 
 
-
   const maxStrain =
     maxStress
     /
     E;
-
 
 
   document.getElementById(
@@ -1996,7 +1818,6 @@ function calculateBeam() {
     " kN·m";
 
 
-
   document.getElementById(
     "deflectionResult"
   ).textContent =
@@ -2009,7 +1830,6 @@ function calculateBeam() {
     +
 
     " mm";
-
 
 
   document.getElementById(
@@ -2026,7 +1846,6 @@ function calculateBeam() {
     " mm";
 
 
-
   document.getElementById(
     "stressResult"
   ).textContent =
@@ -2041,7 +1860,6 @@ function calculateBeam() {
     " MPa";
 
 
-
   document.getElementById(
     "strainResult"
   ).textContent =
@@ -2049,7 +1867,6 @@ function calculateBeam() {
     maxStrain.toExponential(
       6
     );
-
 
 
   document.getElementById(
@@ -2064,7 +1881,6 @@ function calculateBeam() {
     +
 
     " mm⁴";
-
 
 
   drawBeam(
@@ -2082,224 +1898,277 @@ function calculateBeam() {
 
 
 
-/* =====================================================
-   2.5D CROSS SECTION BEAM
-===================================================== */
+/* =========================================================
+   2.5D RECTANGULAR BEAM
+========================================================= */
 
 
-function makeBeam25D(
-  type,
+function drawRectangularBeam(
   left,
   right,
   y
 ) {
 
 
-  const width =
-    right - left;
-
-
   const depthX =
-    16;
+    20;
 
 
   const depthY =
-    -10;
+    -13;
 
 
-
-  /* RECTANGULAR */
-
-
-  if (
-    type === "rect"
-  ) {
-
-
-    return `
-
-      <polygon
-        points="
-        ${left},${y - 14}
-        ${right},${y - 14}
-        ${right + depthX},${y - 14 + depthY}
-        ${left + depthX},${y - 14 + depthY}
-        "
-        fill="#e5e7eb"
-        stroke="#6b7280"
-        stroke-width="2"
-      />
-
-
-      <rect
-        x="${left}"
-        y="${y - 14}"
-        width="${width}"
-        height="28"
-        fill="#cbd5e1"
-        stroke="#6b7280"
-        stroke-width="2"
-      />
-
-
-      <polygon
-        points="
-        ${right},${y - 14}
-        ${right + depthX},${y - 14 + depthY}
-        ${right + depthX},${y + 14 + depthY}
-        ${right},${y + 14}
-        "
-        fill="#94a3b8"
-        stroke="#6b7280"
-        stroke-width="2"
-      />
-
-    `;
-
-  }
-
-
-
-  /* SOLID CIRCULAR */
-
-
-  if (
-    type === "circle"
-  ) {
-
-
-    return `
-
-      <rect
-        x="${left}"
-        y="${y - 12}"
-        width="${width}"
-        height="24"
-        fill="#cbd5e1"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-
-      <ellipse
-        cx="${left}"
-        cy="${y}"
-        rx="10"
-        ry="12"
-        fill="#dbeafe"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-
-      <ellipse
-        cx="${right}"
-        cy="${y}"
-        rx="10"
-        ry="12"
-        fill="#94a3b8"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-
-      <line
-        x1="${left}"
-        y1="${y - 12}"
-        x2="${right}"
-        y2="${y - 12}"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-
-      <line
-        x1="${left}"
-        y1="${y + 12}"
-        x2="${right}"
-        y2="${y + 12}"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-    `;
-
-  }
-
-
-
-  /* HOLLOW CIRCULAR */
-
-
-  if (
-    type === "hollow"
-  ) {
-
-
-    return `
-
-      <rect
-        x="${left}"
-        y="${y - 14}"
-        width="${width}"
-        height="28"
-        fill="#cbd5e1"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-
-      <ellipse
-        cx="${left}"
-        cy="${y}"
-        rx="11"
-        ry="14"
-        fill="#dbeafe"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-
-      <ellipse
-        cx="${right}"
-        cy="${y}"
-        rx="11"
-        ry="14"
-        fill="#94a3b8"
-        stroke="#64748b"
-        stroke-width="2"
-      />
-
-
-      <ellipse
-        cx="${right}"
-        cy="${y}"
-        rx="6"
-        ry="8"
-        fill="#fbfbfc"
-        stroke="#475569"
-        stroke-width="2"
-      />
-
-    `;
-
-  }
-
-
-
-  /* I-BEAM */
+  const h =
+    28;
 
 
   return `
+
+    <polygon
+      points="
+      ${left},${y - h / 2}
+      ${right},${y - h / 2}
+      ${right + depthX},${y - h / 2 + depthY}
+      ${left + depthX},${y - h / 2 + depthY}
+      "
+      fill="url(#topGradient)"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <rect
+      x="${left}"
+      y="${y - h / 2}"
+      width="${right - left}"
+      height="${h}"
+      fill="url(#frontGradient)"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <polygon
+      points="
+      ${right},${y - h / 2}
+      ${right + depthX},${y - h / 2 + depthY}
+      ${right + depthX},${y + h / 2 + depthY}
+      ${right},${y + h / 2}
+      "
+      fill="#94a3b8"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+  `;
+
+}
+
+
+
+/* =========================================================
+   2.5D SOLID SHAFT
+========================================================= */
+
+
+function drawCircularBeam(
+  left,
+  right,
+  y
+) {
+
+
+  return `
+
+    <rect
+      x="${left}"
+      y="${y - 15}"
+      width="${right - left}"
+      height="30"
+      rx="14"
+      fill="url(#cylinderGradient)"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <ellipse
+      cx="${left}"
+      cy="${y}"
+      rx="12"
+      ry="15"
+      fill="#dbeafe"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <ellipse
+      cx="${right}"
+      cy="${y}"
+      rx="12"
+      ry="15"
+      fill="#94a3b8"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <line
+      x1="${left + 8}"
+      y1="${y - 9}"
+      x2="${right - 8}"
+      y2="${y - 9}"
+      stroke="rgba(255,255,255,0.75)"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+
+  `;
+
+}
+
+
+
+/* =========================================================
+   2.5D HOLLOW PIPE
+========================================================= */
+
+
+function drawHollowBeam(
+  left,
+  right,
+  y
+) {
+
+
+  return `
+
+    <rect
+      x="${left}"
+      y="${y - 17}"
+      width="${right - left}"
+      height="34"
+      rx="16"
+      fill="url(#cylinderGradient)"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <ellipse
+      cx="${left}"
+      cy="${y}"
+      rx="13"
+      ry="17"
+      fill="#dbeafe"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <ellipse
+      cx="${right}"
+      cy="${y}"
+      rx="13"
+      ry="17"
+      fill="#94a3b8"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <ellipse
+      cx="${right}"
+      cy="${y}"
+      rx="7"
+      ry="10"
+      fill="#f8fafc"
+      stroke="#475569"
+      stroke-width="2"
+    />
+
+
+    <ellipse
+      cx="${right}"
+      cy="${y}"
+      rx="4"
+      ry="6"
+      fill="#334155"
+      opacity="0.4"
+    />
+
+
+    <line
+      x1="${left + 8}"
+      y1="${y - 10}"
+      x2="${right - 8}"
+      y2="${y - 10}"
+      stroke="rgba(255,255,255,0.75)"
+      stroke-width="3"
+      stroke-linecap="round"
+    />
+
+  `;
+
+}
+
+
+
+/* =========================================================
+   2.5D I-BEAM
+========================================================= */
+
+
+function drawIBeam(
+  left,
+  right,
+  y
+) {
+
+
+  const dx =
+    18;
+
+
+  const dy =
+    -11;
+
+
+  return `
+
+    <!-- BACK PROFILE -->
+
+    <path
+      d="
+      M ${left + dx} ${y - 27 + dy}
+      L ${right + dx} ${y - 27 + dy}
+      L ${right + dx} ${y - 17 + dy}
+      L ${right - 2 + dx} ${y - 17 + dy}
+      L ${right - 2 + dx} ${y + 17 + dy}
+      L ${right + dx} ${y + 17 + dy}
+      L ${right + dx} ${y + 27 + dy}
+      L ${left + dx} ${y + 27 + dy}
+      L ${left + dx} ${y + 17 + dy}
+      L ${left + 2 + dx} ${y + 17 + dy}
+      L ${left + 2 + dx} ${y - 17 + dy}
+      L ${left + dx} ${y - 17 + dy}
+      Z
+      "
+      fill="#94a3b8"
+      stroke="#475569"
+      stroke-width="2"
+    />
+
 
     <!-- TOP FLANGE -->
 
     <rect
       x="${left}"
-      y="${y - 19}"
-      width="${width}"
-      height="9"
-      fill="#cbd5e1"
+      y="${y - 27}"
+      width="${right - left}"
+      height="10"
+      fill="url(#topGradient)"
       stroke="#64748b"
       stroke-width="2"
     />
@@ -2309,10 +2178,10 @@ function makeBeam25D(
 
     <rect
       x="${left}"
-      y="${y - 10}"
-      width="${width}"
-      height="20"
-      fill="#94a3b8"
+      y="${y - 17}"
+      width="${right - left}"
+      height="34"
+      fill="url(#frontGradient)"
       stroke="#64748b"
       stroke-width="2"
     />
@@ -2322,43 +2191,65 @@ function makeBeam25D(
 
     <rect
       x="${left}"
-      y="${y + 10}"
-      width="${width}"
-      height="9"
-      fill="#cbd5e1"
+      y="${y + 17}"
+      width="${right - left}"
+      height="10"
+      fill="#aeb9c8"
       stroke="#64748b"
       stroke-width="2"
     />
 
 
-    <!-- RIGHT I PROFILE -->
+    <!-- DEPTH CONNECTIONS -->
 
     <line
       x1="${right}"
-      y1="${y - 19}"
-      x2="${right + 18}"
-      y2="${y - 28}"
+      y1="${y - 27}"
+      x2="${right + dx}"
+      y2="${y - 27 + dy}"
       stroke="#475569"
+      stroke-width="2"
+    />
+
+
+    <line
+      x1="${right}"
+      y1="${y + 27}"
+      x2="${right + dx}"
+      y2="${y + 27 + dy}"
+      stroke="#475569"
+      stroke-width="2"
+    />
+
+
+    <!-- I PROFILE END -->
+
+    <line
+      x1="${right + dx - 8}"
+      y1="${y - 27 + dy}"
+      x2="${right + dx + 8}"
+      y2="${y - 27 + dy}"
+      stroke="#334155"
       stroke-width="7"
     />
 
 
     <line
-      x1="${right + 9}"
-      y1="${y - 23}"
-      x2="${right + 9}"
-      y2="${y + 15}"
-      stroke="#475569"
+      x1="${right + dx}"
+      y1="${y - 24 + dy}"
+      x2="${right + dx}"
+      y2="${y + 24 + dy}"
+      stroke="#334155"
       stroke-width="5"
     />
 
 
     <line
-      x1="${right}"
-      y1="${y + 19}"
-      x2="${right + 18}"
-      y2="${y + 10}"
-      stroke="#475569"
+      x1="${right + dx - 8}"
+      y1="${y + 27 + dy}"
+      x2="${right + dx + 8}"
+      y2="${y + 27 + dy}"
+      stroke="#334155"
       stroke-width="7"
     />
 
@@ -2368,16 +2259,81 @@ function makeBeam25D(
 
 
 
-/* =====================================================
+/* =========================================================
+   SELECT 2.5D BEAM
+========================================================= */
+
+
+function drawBeamBody(
+  type,
+  left,
+  right,
+  y
+) {
+
+
+  if (
+    type === "rect"
+  ) {
+
+
+    return drawRectangularBeam(
+      left,
+      right,
+      y
+    );
+
+  }
+
+
+  if (
+    type === "circle"
+  ) {
+
+
+    return drawCircularBeam(
+      left,
+      right,
+      y
+    );
+
+  }
+
+
+  if (
+    type === "hollow"
+  ) {
+
+
+    return drawHollowBeam(
+      left,
+      right,
+      y
+    );
+
+  }
+
+
+  return drawIBeam(
+    left,
+    right,
+    y
+  );
+
+}
+
+
+
+/* =========================================================
    SUPPORTS
-===================================================== */
+========================================================= */
 
 
-function makeSupports(
+function drawSupports(
   beamType,
   left,
   right,
-  beamY
+  y
 ) {
 
 
@@ -2388,13 +2344,13 @@ function makeSupports(
 
     return `
 
-      <!-- LEFT PIN -->
+      <!-- LEFT PIN SUPPORT -->
 
       <polygon
         points="
-        ${left - 18},${beamY + 48}
-        ${left + 18},${beamY + 48}
-        ${left},${beamY + 19}
+        ${left - 21},${y + 57}
+        ${left + 21},${y + 57}
+        ${left},${y + 27}
         "
         fill="#ffffff"
         stroke="#111827"
@@ -2402,23 +2358,35 @@ function makeSupports(
       />
 
 
+      <polygon
+        points="
+        ${left - 21},${y + 57}
+        ${left + 21},${y + 57}
+        ${left + 30},${y + 49}
+        ${left - 12},${y + 49}
+        "
+        fill="#e2e8f0"
+        opacity="0.7"
+      />
+
+
       <line
-        x1="${left - 27}"
-        y1="${beamY + 52}"
-        x2="${left + 27}"
-        y2="${beamY + 52}"
+        x1="${left - 30}"
+        y1="${y + 62}"
+        x2="${left + 30}"
+        y2="${y + 62}"
         stroke="#111827"
         stroke-width="3"
       />
 
 
-      <!-- RIGHT ROLLER -->
+      <!-- RIGHT ROLLER SUPPORT -->
 
       <polygon
         points="
-        ${right - 18},${beamY + 48}
-        ${right + 18},${beamY + 48}
-        ${right},${beamY + 19}
+        ${right - 21},${y + 57}
+        ${right + 21},${y + 57}
+        ${right},${y + 27}
         "
         fill="#ffffff"
         stroke="#111827"
@@ -2427,9 +2395,9 @@ function makeSupports(
 
 
       <circle
-        cx="${right - 10}"
-        cy="${beamY + 55}"
-        r="4"
+        cx="${right - 11}"
+        cy="${y + 65}"
+        r="5"
         fill="#ffffff"
         stroke="#111827"
         stroke-width="2"
@@ -2437,9 +2405,9 @@ function makeSupports(
 
 
       <circle
-        cx="${right + 10}"
-        cy="${beamY + 55}"
-        r="4"
+        cx="${right + 11}"
+        cy="${y + 65}"
+        r="5"
         fill="#ffffff"
         stroke="#111827"
         stroke-width="2"
@@ -2447,10 +2415,10 @@ function makeSupports(
 
 
       <line
-        x1="${right - 28}"
-        y1="${beamY + 61}"
-        x2="${right + 28}"
-        y2="${beamY + 61}"
+        x1="${right - 31}"
+        y1="${y + 73}"
+        x2="${right + 31}"
+        y2="${y + 73}"
         stroke="#111827"
         stroke-width="3"
       />
@@ -2466,20 +2434,20 @@ function makeSupports(
 
 
   for (
-    let y = beamY - 45;
-    y <= beamY + 55;
-    y += 14
+    let yy = y - 58;
+    yy <= y + 66;
+    yy += 15
   ) {
 
 
     hatch += `
 
       <line
-        x1="${left - 30}"
-        y1="${y}"
-        x2="${left - 7}"
-        y2="${y - 13}"
-        stroke="#6b7280"
+        x1="${left - 40}"
+        y1="${yy}"
+        x2="${left - 13}"
+        y2="${yy - 16}"
+        stroke="#64748b"
         stroke-width="2"
       />
 
@@ -2488,17 +2456,45 @@ function makeSupports(
   }
 
 
-
   return `
+
+    <!-- 2.5D WALL -->
+
+    <polygon
+      points="
+      ${left - 45},${y - 67}
+      ${left},${y - 55}
+      ${left},${y + 70}
+      ${left - 45},${y + 58}
+      "
+      fill="#cbd5e1"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
+
+    <polygon
+      points="
+      ${left - 45},${y - 67}
+      ${left - 25},${y - 81}
+      ${left + 18},${y - 68}
+      ${left},${y - 55}
+      "
+      fill="#e2e8f0"
+      stroke="#64748b"
+      stroke-width="2"
+    />
+
 
     <line
       x1="${left}"
-      y1="${beamY - 50}"
+      y1="${y - 58}"
       x2="${left}"
-      y2="${beamY + 60}"
+      y2="${y + 73}"
       stroke="#111827"
       stroke-width="8"
     />
+
 
     ${hatch}
 
@@ -2508,9 +2504,9 @@ function makeSupports(
 
 
 
-/* =====================================================
-   DRAW VISUALIZATION
-===================================================== */
+/* =========================================================
+   VISUALIZATION
+========================================================= */
 
 
 function drawBeam(
@@ -2526,18 +2522,18 @@ function drawBeam(
 
 
   const left =
-    105;
+    145;
 
 
   const right =
-    890;
+    930;
 
 
   const beamY =
-    125;
+    155;
 
 
-  const width =
+  const plotWidth =
     right - left;
 
 
@@ -2546,43 +2542,69 @@ function drawBeam(
     x =>
 
       left
+
       +
+
       (
-        x / L
+        x /
+        L
       )
+
       *
-      width;
+
+      plotWidth;
+
+
+
+  const section =
+    sectionType.value;
+
+
+
+  const sectionText =
+
+    document.getElementById(
+      "sectionType"
+    ).options[
+
+      document.getElementById(
+        "sectionType"
+      ).selectedIndex
+
+    ].text;
+
+
+
+  const beamName =
+
+    beamType === "simply"
+
+      ?
+
+      "Simply Supported Beam"
+
+      :
+
+      "Cantilever Beam";
 
 
 
   const beamBody =
-
-    makeBeam25D(
-
-      sectionType.value,
-
+    drawBeamBody(
+      section,
       left,
-
       right,
-
       beamY
-
     );
 
 
 
   const supports =
-
-    makeSupports(
-
+    drawSupports(
       beamType,
-
       left,
-
       right,
-
       beamY
-
     );
 
 
@@ -2590,22 +2612,22 @@ function drawBeam(
   /* DEFLECTION CURVE */
 
 
-  let deflectionPath =
+  let path =
     "";
 
 
-  const points =
-    180;
+  const samples =
+    200;
 
 
-  const visualAmplitude =
+  const deflectionAmplitude =
     90;
 
 
 
   for (
     let i = 0;
-    i <= points;
+    i <= samples;
     i++
   ) {
 
@@ -2614,11 +2636,10 @@ function drawBeam(
       L *
       i
       /
-      points;
+      samples;
 
 
-
-    const y =
+    const realY =
       Math.abs(
 
         deflectionAtX(
@@ -2634,20 +2655,18 @@ function drawBeam(
       );
 
 
-
     const ratio =
 
       maxDeflection > 0
 
         ?
 
-        y /
+        realY /
         maxDeflection
 
         :
 
         0;
-
 
 
     const sx =
@@ -2656,19 +2675,21 @@ function drawBeam(
       );
 
 
-
     const sy =
 
       beamY
 
       +
 
+      43
+
+      +
+
       ratio *
-      visualAmplitude;
+      deflectionAmplitude;
 
 
-
-    deflectionPath +=
+    path +=
 
       (
         i === 0
@@ -2704,44 +2725,18 @@ function drawBeam(
     );
 
 
-
   const maxPointX =
     toSvgX(
       maxX
     );
 
 
-
   const maxPointY =
     beamY
     +
-    visualAmplitude;
-
-
-
-  const beamName =
-
-    beamType === "simply"
-
-      ?
-
-      "Simply Supported Beam"
-
-      :
-
-      "Cantilever Beam";
-
-
-
-  const sectionName =
-
-    document.getElementById(
-      "sectionType"
-    ).options[
-      document.getElementById(
-        "sectionType"
-      ).selectedIndex
-    ].text;
+    43
+    +
+    deflectionAmplitude;
 
 
 
@@ -2750,37 +2745,92 @@ function drawBeam(
 
     <defs>
 
+      <linearGradient
+        id="frontGradient"
+        x1="0"
+        y1="0"
+        x2="0"
+        y2="1">
 
-      <marker
-        id="arrowhead"
-        markerWidth="10"
-        markerHeight="10"
-        refX="5"
-        refY="5"
-        orient="auto">
+        <stop
+          offset="0%"
+          stop-color="#dbe3ed"
+        />
+
+        <stop
+          offset="100%"
+          stop-color="#9eacbd"
+        />
+
+      </linearGradient>
 
 
-        <path
-          d="M 0 0 L 10 5 L 0 10 z"
-          fill="#dc2626">
-        </path>
+      <linearGradient
+        id="topGradient"
+        x1="0"
+        y1="0"
+        x2="0"
+        y2="1">
+
+        <stop
+          offset="0%"
+          stop-color="#f1f5f9"
+        />
+
+        <stop
+          offset="100%"
+          stop-color="#cbd5e1"
+        />
+
+      </linearGradient>
 
 
-      </marker>
+      <linearGradient
+        id="cylinderGradient"
+        x1="0"
+        y1="0"
+        x2="0"
+        y2="1">
 
+        <stop
+          offset="0%"
+          stop-color="#7f8b9b"
+        />
+
+        <stop
+          offset="25%"
+          stop-color="#e2e8f0"
+        />
+
+        <stop
+          offset="50%"
+          stop-color="#cbd5e1"
+        />
+
+        <stop
+          offset="80%"
+          stop-color="#94a3b8"
+        />
+
+        <stop
+          offset="100%"
+          stop-color="#64748b"
+        />
+
+      </linearGradient>
 
     </defs>
 
 
 
-    <!-- TITLE -->
+    <!-- TITLE AREA -->
 
 
     <text
-      x="500"
-      y="25"
+      x="550"
+      y="29"
       text-anchor="middle"
-      font-size="18"
+      font-size="20"
       font-weight="700"
       fill="#111827">
 
@@ -2789,26 +2839,17 @@ function drawBeam(
     </text>
 
 
-
     <text
-      x="500"
-      y="47"
+      x="550"
+      y="52"
       text-anchor="middle"
       font-size="13"
       fill="#64748b">
 
       Cross Section:
-      ${sectionName}
-      — 2.5D schematic
+      ${sectionText}
 
     </text>
-
-
-
-    <!-- 2.5D BEAM -->
-
-
-    ${beamBody}
 
 
 
@@ -2819,52 +2860,42 @@ function drawBeam(
 
 
 
-    <!-- LOAD -->
+    <!-- 2.5D UNDEFORMED BEAM -->
+
+
+    ${beamBody}
+
+
+
+    <!-- DRAGGABLE POINT LOAD -->
 
 
     <g
-      data-draggable="load"
-      style="cursor: ew-resize;">
+      data-load-handle="true"
+      style="cursor: grab;">
 
 
-      <line
-        data-draggable="load"
-        x1="${loadX}"
-        y1="65"
-        x2="${loadX}"
-        y2="${beamY - 23}"
-        stroke="#dc2626"
-        stroke-width="4"
-        marker-end="url(#arrowhead)"
-      />
+      <!-- LARGE INVISIBLE HIT AREA -->
 
-
-      <circle
-        data-draggable="load"
-        cx="${loadX}"
-        cy="66"
-        r="10"
-        fill="#dc2626"
-        stroke="#ffffff"
-        stroke-width="3"
-      />
-
-
-      <circle
-        data-draggable="load"
-        cx="${loadX}"
-        cy="66"
-        r="18"
+      <rect
+        data-load-handle="true"
+        x="${loadX - 42}"
+        y="65"
+        width="84"
+        height="110"
         fill="transparent"
+        pointer-events="all"
       />
 
+
+      <!-- LOAD VALUE -->
 
       <text
-        data-draggable="load"
+        data-load-handle="true"
         x="${loadX}"
-        y="59"
+        y="83"
         text-anchor="middle"
-        font-size="13"
+        font-size="14"
         font-weight="700"
         fill="#b91c1c">
 
@@ -2873,34 +2904,108 @@ function drawBeam(
       </text>
 
 
+      <!-- HAND GRIP -->
+
+      <circle
+        data-load-handle="true"
+        cx="${loadX}"
+        cy="102"
+        r="10"
+        fill="#ef4444"
+        stroke="#ffffff"
+        stroke-width="3"
+      />
+
+
+      <!-- LOAD LINE -->
+
+      <line
+        data-load-handle="true"
+        x1="${loadX}"
+        y1="112"
+        x2="${loadX}"
+        y2="${beamY - 18}"
+        stroke="#dc2626"
+        stroke-width="5"
+      />
+
+
+      <!-- ARROW TIP -->
+
+      <polygon
+        data-load-handle="true"
+        points="
+        ${loadX - 13},${beamY - 18}
+        ${loadX + 13},${beamY - 18}
+        ${loadX},${beamY + 8}
+        "
+        fill="#dc2626"
+        stroke="#b91c1c"
+        stroke-width="1.5"
+      />
+
     </g>
 
 
 
-    <!-- LOAD POSITION LABEL -->
+    <!-- LOAD POSITION -->
+
+
+    <line
+      x1="${left}"
+      y1="${beamY - 65}"
+      x2="${loadX}"
+      y2="${beamY - 65}"
+      stroke="#f59e0b"
+      stroke-width="1.7"
+    />
+
+
+    <line
+      x1="${left}"
+      y1="${beamY - 70}"
+      x2="${left}"
+      y2="${beamY - 60}"
+      stroke="#f59e0b"
+      stroke-width="1.7"
+    />
+
+
+    <line
+      x1="${loadX}"
+      y1="${beamY - 70}"
+      x2="${loadX}"
+      y2="${beamY - 60}"
+      stroke="#f59e0b"
+      stroke-width="1.7"
+    />
 
 
     <text
-      x="${loadX + 12}"
-      y="${beamY - 32}"
-      text-anchor="start"
+      x="${(left + loadX) / 2}"
+      y="${beamY - 73}"
+      text-anchor="middle"
       font-size="12"
-      fill="#b91c1c">
+      font-weight="700"
+      fill="#d97706">
 
-      a = ${formatNumber(a, 2)} mm
+      a =
+      ${formatNumber(a, 2)}
+      mm
 
     </text>
 
 
 
-    <!-- DEFLECTION -->
+    <!-- DEFLECTION CURVE -->
 
 
     <path
-      d="${deflectionPath}"
+      d="${path}"
       fill="none"
       stroke="#2563eb"
       stroke-width="4"
+      stroke-linecap="round"
     />
 
 
@@ -2918,24 +3023,22 @@ function drawBeam(
     />
 
 
-
     <text
       x="${maxPointX}"
-      y="${maxPointY + 23}"
+      y="${maxPointY + 24}"
       text-anchor="middle"
       font-size="12"
       font-weight="700"
       fill="#111827">
 
-      Max deflection
+      Maximum Deflection
 
     </text>
 
 
-
     <text
       x="${maxPointX}"
-      y="${maxPointY + 39}"
+      y="${maxPointY + 41}"
       text-anchor="middle"
       font-size="12"
       fill="#475569">
@@ -2948,45 +3051,42 @@ function drawBeam(
 
 
 
-    <!-- DIMENSION -->
+    <!-- LENGTH DIMENSION -->
 
 
     <line
       x1="${left}"
-      y1="302"
+      y1="386"
       x2="${right}"
-      y2="302"
+      y2="386"
       stroke="#94a3b8"
       stroke-width="1.5"
     />
-
 
 
     <line
       x1="${left}"
-      y1="296"
+      y1="379"
       x2="${left}"
-      y2="308"
+      y2="393"
       stroke="#94a3b8"
       stroke-width="1.5"
     />
-
 
 
     <line
       x1="${right}"
-      y1="296"
+      y1="379"
       x2="${right}"
-      y2="308"
+      y2="393"
       stroke="#94a3b8"
       stroke-width="1.5"
     />
 
 
-
     <text
       x="${left}"
-      y="327"
+      y="412"
       text-anchor="middle"
       font-size="12"
       fill="#64748b">
@@ -2996,10 +3096,9 @@ function drawBeam(
     </text>
 
 
-
     <text
       x="${right}"
-      y="327"
+      y="412"
       text-anchor="middle"
       font-size="12"
       fill="#64748b">
@@ -3010,16 +3109,15 @@ function drawBeam(
 
     </text>
 
-
   `;
 
 }
 
 
 
-/* =====================================================
-   DRAG POINT LOAD
-===================================================== */
+/* =========================================================
+   LOAD DRAG
+========================================================= */
 
 
 beamSvg.addEventListener(
@@ -3027,30 +3125,45 @@ beamSvg.addEventListener(
   function(event) {
 
 
-    const target =
-      event.target;
+    const handle =
+      event.target.closest(
+        "[data-load-handle='true']"
+      );
 
 
     if (
-
-      target.getAttribute(
-        "data-draggable"
-      )
-
-      ===
-
-      "load"
-
+      !handle
     ) {
 
-
-      draggingLoad =
-        true;
-
-
-      event.preventDefault();
+      return;
 
     }
+
+
+    draggingLoad =
+      true;
+
+
+    document.body.classList.add(
+      "dragging"
+    );
+
+
+    const group =
+      handle.closest(
+        "g[data-load-handle='true']"
+      );
+
+
+    if (group) {
+
+      group.style.cursor =
+        "grabbing";
+
+    }
+
+
+    event.preventDefault();
 
   }
 );
@@ -3066,24 +3179,19 @@ window.addEventListener(
       !draggingLoad
     ) {
 
-
       return;
 
     }
 
 
-
-    const lengthInput =
-      document.getElementById(
-        "length"
-      );
-
-
     const L =
       Number(
-        lengthInput.value
-      );
 
+        document.getElementById(
+          "length"
+        ).value
+
+      );
 
 
     if (
@@ -3092,19 +3200,16 @@ window.addEventListener(
       L <= 0
     ) {
 
-
       return;
 
     }
-
 
 
     const rect =
       beamSvg.getBoundingClientRect();
 
 
-
-    const svgX =
+    const viewBoxX =
 
       (
         event.clientX
@@ -3117,34 +3222,32 @@ window.addEventListener(
 
       *
 
-      1000;
-
+      1100;
 
 
     const left =
-      105;
+      145;
 
 
     const right =
-      890;
-
+      930;
 
 
     let ratio =
 
       (
-        svgX
+        viewBoxX
         -
         left
       )
 
       /
+
       (
         right
         -
         left
       );
-
 
 
     ratio =
@@ -3157,11 +3260,9 @@ window.addEventListener(
       );
 
 
-
     let a =
       ratio *
       L;
-
 
 
     const beamType =
@@ -3170,14 +3271,12 @@ window.addEventListener(
       ).value;
 
 
-
     const minimumPosition =
-
       Math.max(
-        L * 0.001,
+        L *
+        0.002,
         0.001
       );
-
 
 
     if (
@@ -3202,7 +3301,6 @@ window.addEventListener(
     }
 
 
-
     else {
 
 
@@ -3221,14 +3319,13 @@ window.addEventListener(
     }
 
 
-
     document.getElementById(
       "position"
     ).value =
+
       a.toFixed(
         1
       );
-
 
 
     calculateBeam();
@@ -3241,35 +3338,38 @@ window.addEventListener(
 
 
 
+function stopDragging() {
+
+
+  draggingLoad =
+    false;
+
+
+  document.body.classList.remove(
+    "dragging"
+  );
+
+}
+
+
+
 window.addEventListener(
   "pointerup",
-  function() {
-
-
-    draggingLoad =
-      false;
-
-  }
+  stopDragging
 );
 
 
 
 window.addEventListener(
   "pointercancel",
-  function() {
-
-
-    draggingLoad =
-      false;
-
-  }
+  stopDragging
 );
 
 
 
-/* =====================================================
+/* =========================================================
    EVENTS
-===================================================== */
+========================================================= */
 
 
 sectionType.addEventListener(
@@ -3314,9 +3414,9 @@ document.getElementById(
 
 
 
-/* =====================================================
-   INITIAL LOAD
-===================================================== */
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
 
 renderSectionFields();
@@ -3326,7 +3426,6 @@ calculateBeam();
 
 
 </script>
-
 
 </body>
 
